@@ -37,7 +37,9 @@ class MainActivity : ComponentActivity() {
 
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    scoreBoardLayout()
+                    //ScoreBoard()
+                    //scoreBoardLayout()
+                    ScaffoldExample()
                 }
             }
         }
@@ -64,7 +66,7 @@ class MainActivity : ComponentActivity() {
     fun MyDataTable() {
 
         val scoreBoardList = listOf(
-            ScoreBoardData("Team 1",1,30),
+            ScoreBoardData("Team 99",1,30),
             ScoreBoardData("Team 3",1,8),
             ScoreBoardData("Team 2",0,0),
             ScoreBoardData("Team 4",0,0),

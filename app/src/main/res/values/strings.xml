@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Scoreboard-App</string>
+    <string name="home_icon">Home Icon</string>
+
 </resources>
