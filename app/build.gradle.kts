@@ -69,4 +69,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("com.github.Breens-Mbaka:BeeTablesCompose:1.2.0")
+
+    // https://mvnrepository.com/artifact/androidx.compose.foundation/foundation
+    runtimeOnly("androidx.compose.foundation:foundation:1.6.8")
+
+    implementation("br.com.devsrsouza.compose.icons:erikflowers-weather-icons:1.1.0")
+
 }

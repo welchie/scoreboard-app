@@ -1,12 +1,11 @@
 package com.example.scoreboard_app
 
-import android.icu.text.Transliterator.Position
-import android.widget.TableRow
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -104,7 +103,7 @@ fun ScoreDataRow(dataRow:ScoreBoardData)
 
 @Preview
 @Composable
-fun MyDataTable() {
+fun MyDataTable(modifier: Modifier) {
 
     val scoreBoardList = listOf(
         ScoreBoardData("Team 99",1,30),

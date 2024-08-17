@@ -40,13 +40,14 @@ class MainActivity : ComponentActivity() {
                     //ScoreBoard()
                     //scoreBoardLayout()
                     ScaffoldExample()
+                    //GridViewActivity()
                 }
             }
         }
     }
 
     @Composable
-    fun scoreBoardLayout()
+    fun ScoreBoardLayout()
     {
         Column {
             MyDataTable()
