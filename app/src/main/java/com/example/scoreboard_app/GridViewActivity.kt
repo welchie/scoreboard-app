@@ -46,6 +46,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.scoreboard_app.ui.theme.ScoreboardAppTheme
+import khttp.responses.Response
+import org.json.JSONObject
 
 class GridViewActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -140,6 +142,10 @@ override fun onCreate(savedInstanceState: Bundle?) {
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun GridView(context: Context) {
+
+
+    //Get ScoreboardData from the API
+    //getScoreBoardList()
     // on below line we are creating and initializing our array list
     lateinit var scoreBoardList: List<ScoreItem>
     scoreBoardList = ArrayList<ScoreItem>()
@@ -154,7 +160,7 @@ fun GridView(context: Context) {
 
     scoreBoardList = scoreBoardList + ScoreItem("Lions",10,125,  R.mipmap.lion_foreground)
     scoreBoardList = scoreBoardList + ScoreItem("Rays",8,99,  R.mipmap.ray_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Fish",7,85,  R.mipmap.ray_foreground)
+    scoreBoardList = scoreBoardList + ScoreItem("Fish",7,85,  R.mipmap.fish_foreground)
     scoreBoardList = scoreBoardList + ScoreItem("Pandas",6,40,  R.mipmap.panda_foreground)
     scoreBoardList = scoreBoardList + ScoreItem("Hippos",6,35,  R.mipmap.hippo_foreground)
     scoreBoardList = scoreBoardList + ScoreItem("Zebras",1,5,  R.mipmap.zebra_foreground)
@@ -173,7 +179,7 @@ fun GridView(context: Context) {
                     // inside on click we are displaying the toast message.
                     Toast.makeText(
                         context,
-                        scoreBoardList[it].teamName + " selected..",
+                        scoreBoardList[it].teamImg.toString() + " selected..",
                         Toast.LENGTH_SHORT
                     ).show()
                 },
@@ -226,6 +232,7 @@ fun GridView(context: Context) {
                         text = scoreBoardList[it].score.toString(),
                         color = Color.DarkGray
                     )
+
 
                 }
             }

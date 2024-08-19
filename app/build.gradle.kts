@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.paging.common.android)
+    implementation(libs.androidx.tracing.perfetto.handshake)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,5 +75,7 @@ dependencies {
     runtimeOnly("androidx.compose.foundation:foundation:1.6.8")
 
     implementation("br.com.devsrsouza.compose.icons:erikflowers-weather-icons:1.1.0")
+    // https://mvnrepository.com/artifact/org.danilopianini/khttp
+    implementation ("org.danilopianini:khttp:1.6.3")
 
 }
