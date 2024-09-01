@@ -69,7 +69,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("com.github.Breens-Mbaka:BeeTablesCompose:1.2.0")
 
     // https://mvnrepository.com/artifact/androidx.compose.foundation/foundation
     runtimeOnly("androidx.compose.foundation:foundation:1.6.8")
@@ -78,4 +77,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.danilopianini/khttp
     implementation ("org.danilopianini:khttp:1.6.3")
 
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
 }
+

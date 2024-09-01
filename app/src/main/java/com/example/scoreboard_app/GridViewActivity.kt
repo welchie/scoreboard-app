@@ -2,6 +2,7 @@ package com.example.scoreboard_app
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -22,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,17 +45,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
+import com.example.scoreboard_app.ScoreBoardRest.Companion.getScoreBoardData
 import com.example.scoreboard_app.ui.theme.ScoreboardAppTheme
-import khttp.responses.Response
-import org.json.JSONObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import kotlin.random.Random
+
+
+var data : JSONArray = JSONArray()
+var scoreBoardList: List<ScoreItem> = ArrayList<ScoreItem>()
 
 class GridViewActivity : ComponentActivity() {
+
+    override fun onStart() {
+        super.onStart()
+       lifecycleScope.launch {
+            // Call your suspend function here, e.g., coroutineFunction()
+            data = coroutineFunction()
+            //data = getScoreBoardData()
+        }
+    }
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    lateinit var data: JSONArray
+    lifecycleScope.launch {
+        // Call your suspend function here, e.g., coroutineFunction()
+        data = coroutineFunction()
+        //data = getScoreBoardData()
+    }
+
+    //data = ScoreBoardRest.getScoreBoardList()
     setContent {
         ScoreboardAppTheme {
             Surface(
@@ -111,10 +145,20 @@ override fun onCreate(savedInstanceState: Bundle?) {
                     floatingActionButton = {
                         FloatingActionButton(onClick = { Toast.makeText(
                             this,
-                            "Add New Score",
+                            "Refreshing...",
                             Toast.LENGTH_SHORT
-                        ).show() }) {
-                            Icon(Icons.Default.Add, contentDescription = "Add")
+                        ).show()
+                            val i = Intent(
+                                this@GridViewActivity,
+                                GridViewActivity::class.java
+                            )
+                            finish()
+                            overridePendingTransition(0, 0)
+                            startActivity(i)
+                            overridePendingTransition(0, 0)
+
+                        }) {
+                            Icon(Icons.Default.Refresh, contentDescription = "Load")
                         }
                     }
                 )
@@ -138,6 +182,29 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 }
 
+
+
+suspend fun coroutineFunction() :JSONArray{
+    delay(1000) // simulate a long-running operation
+    //Build Score Data here
+    return withContext(Dispatchers.IO) {
+        getScoreBoardData()
+    }
+
+}
+
+fun updateScorboardData() : List<ScoreItem>
+{
+    println("Refreshing data")
+    scoreBoardList= ArrayList<ScoreItem>()
+    for (i in 0 until data.length()) {
+        val row = data.getJSONObject(i)
+        println("${row.get("teamName")} \t ${row.get("numActivities")} \t ${row.get("score")}")
+
+        scoreBoardList = scoreBoardList + ScoreItem(row.get("teamName").toString(),row.get("numActivities").toString().toInt(), row.get("score").toString().toInt(),  row.get("teamLogo").toString().toInt())
+    }
+    return scoreBoardList
+}
 // on below line we are creating grid view function for loading our grid view.
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -145,25 +212,30 @@ fun GridView(context: Context) {
 
 
     //Get ScoreboardData from the API
-    //getScoreBoardList()
+    //val data = ScoreBoardRest.getScoreBoardList()
     // on below line we are creating and initializing our array list
-    lateinit var scoreBoardList: List<ScoreItem>
-    scoreBoardList = ArrayList<ScoreItem>()
+    scoreBoardList= ArrayList<ScoreItem>()
 
-    // on below line we are adding data to our list.
-    scoreBoardList = scoreBoardList + ScoreItem("Sharks",10,125,  R.mipmap.shark_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Elephants",8,99,  R.mipmap.elephant_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Owls",7,85,  R.mipmap.owl_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Bees",6,40,  R.mipmap.bee_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Foxes",6,35,  R.mipmap.fox_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Pigs",1,5,  R.mipmap.pig_foreground)
+    for (i in 0 until data.length()) {
+        val row = data.getJSONObject(i)
+        //println("${row.get("teamName")} \t ${row.get("numActivities")} \t ${row.get("score")}")
 
-    scoreBoardList = scoreBoardList + ScoreItem("Lions",10,125,  R.mipmap.lion_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Rays",8,99,  R.mipmap.ray_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Fish",7,85,  R.mipmap.fish_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Pandas",6,40,  R.mipmap.panda_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Hippos",6,35,  R.mipmap.hippo_foreground)
-    scoreBoardList = scoreBoardList + ScoreItem("Zebras",1,5,  R.mipmap.zebra_foreground)
+        scoreBoardList = scoreBoardList + ScoreItem(row.get("teamName").toString(),row.get("numActivities").toString().toInt(), row.get("score").toString().toInt(),  row.get("teamLogo").toString().toInt())
+        //println("Team " + row.get("teamName").toString() + " \n")
+        //scoreBoardList = scoreBoardList + ScoreItem(row.get("teamName").toString(),row.get("numActivities").toString().toInt(), row.get("score").toString().toInt(),  R.mipmap.ray_foreground)
+
+
+    }
+    Spacer(modifier = Modifier.height(9.dp))
+
+    Row {
+        Text(text = "              ")
+        Text(text = "Logo", fontWeight = FontWeight.Bold)
+        Text(text = "              ")
+        Text(text = "Team Name", fontWeight = FontWeight.Bold)
+        Text(text = "          ")
+        Text(text = "Score", fontWeight = FontWeight.Bold)
+    }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
@@ -179,7 +251,7 @@ fun GridView(context: Context) {
                     // inside on click we are displaying the toast message.
                     Toast.makeText(
                         context,
-                        scoreBoardList[it].teamImg.toString() + " selected..",
+                        scoreBoardList[it].teamName.toString() + " selected..",
                         Toast.LENGTH_SHORT
                     ).show()
                 },
@@ -219,12 +291,12 @@ fun GridView(context: Context) {
                         color = Color.DarkGray
                     )
                     // on the below line we are adding a spacer.
-                    Spacer(modifier = Modifier.height(9.dp))
-
-                    Text(
-                        text = scoreBoardList[it].numActivities.toString(),
-                        color = Color.DarkGray
-                    )
+//                    Spacer(modifier = Modifier.height(9.dp))
+//
+//                    Text(
+//                        text = scoreBoardList[it].numActivities.toString(),
+//                        color = Color.DarkGray
+//                    )
 
                     Spacer(modifier = Modifier.height(9.dp))
 
@@ -232,6 +304,13 @@ fun GridView(context: Context) {
                         text = scoreBoardList[it].score.toString(),
                         color = Color.DarkGray
                     )
+
+//                    Spacer(modifier = Modifier.height(9.dp))
+//
+//                    Text(
+//                        text = scoreBoardList[it].teamImg.toString(),
+//                        color = Color.DarkGray
+//                    )
 
 
                 }

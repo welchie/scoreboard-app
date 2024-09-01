@@ -11,7 +11,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.breens.beetablescompose.BeeTablesCompose
 import com.example.scoreboard_app.MainActivity.ScoreBoardData
 
 @Preview
@@ -84,7 +83,6 @@ fun ScoreRowHeader()
     }
 }
 
-@Preview
 @Composable
 fun ScoreDataRow(dataRow:ScoreBoardData)
 {
@@ -101,7 +99,6 @@ fun ScoreDataRow(dataRow:ScoreBoardData)
     }
 }
 
-@Preview
 @Composable
 fun MyDataTable(modifier: Modifier) {
 
@@ -134,18 +131,5 @@ fun MyDataTable(modifier: Modifier) {
 
     val headerTitles = listOf("Team Name","Num Activities","Score")
 
-    BeeTablesCompose (
-        data = scoreBoardList,
-        enableTableHeaderTitles = true,
-        headerTableTitles = headerTitles,
-        headerTitlesBorderColor = Color.White,
-        headerTitlesBackGroundColor = Color.DarkGray,
-        headerTitlesTextStyle = TextStyle(fontSize = 14.sp, color = Color.White),
 
-        tableRowColors = listOf(Color.White, Color.White),
-        rowBorderColor = Color.LightGray,
-        rowTextStyle = TextStyle(fontSize = 10.sp, color =  Color.Black),
-        tableElevation = 6.dp,
-        shape = RoundedCornerShape(20.dp)
-    )
 }
