@@ -229,12 +229,12 @@ fun GridView(context: Context) {
     Spacer(modifier = Modifier.height(9.dp))
 
     Row {
-        Text(text = "              ")
-        Text(text = "Logo", fontWeight = FontWeight.Bold)
-        Text(text = "              ")
-        Text(text = "Team Name", fontWeight = FontWeight.Bold)
+        Text(text = "            ")
+        Text(text = "Logo", fontWeight = FontWeight.Bold, color = Color.Black)
+        Text(text = "            ")
+        Text(text = "Team Name", fontWeight = FontWeight.Bold, color = Color.Black)
         Text(text = "          ")
-        Text(text = "Score", fontWeight = FontWeight.Bold)
+        Text(text = "Score       ", fontWeight = FontWeight.Bold, color = Color.Black)
     }
 
     LazyVerticalGrid(
