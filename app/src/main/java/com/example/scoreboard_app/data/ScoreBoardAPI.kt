@@ -1,13 +1,12 @@
-package com.example.scoreboard_app
+package com.example.scoreboard_app.data
 
 import khttp.responses.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
-import org.json.JSONObject
 
 
-class ScoreBoardRest {
+class ScoreBoardAPI {
 
 
     companion object {
@@ -22,9 +21,7 @@ class ScoreBoardRest {
             val response: Response =
                 khttp.get(URL)
             val statusCode = response.statusCode
-            //println("Status Code: $statusCode")
             val data: JSONArray = response.jsonArray
-            //println(data)
 
             return data
         }

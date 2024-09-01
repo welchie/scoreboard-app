@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -45,20 +44,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.example.scoreboard_app.ScoreBoardRest.Companion.getScoreBoardData
+import com.example.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
+import com.example.scoreboard_app.data.ScoreItem
 import com.example.scoreboard_app.ui.theme.ScoreboardAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
-import kotlin.random.Random
 
 
 var data : JSONArray = JSONArray()
@@ -69,36 +66,31 @@ class GridViewActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
        lifecycleScope.launch {
-            // Call your suspend function here, e.g., coroutineFunction()
-            data = coroutineFunction()
-            //data = getScoreBoardData()
+            data = getBackEndData()
         }
     }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    lateinit var data: JSONArray
-    lifecycleScope.launch {
+        lateinit var data: JSONArray
+        lifecycleScope.launch {
         // Call your suspend function here, e.g., coroutineFunction()
-        data = coroutineFunction()
-        //data = getScoreBoardData()
+        data = getBackEndData()
     }
-
-    //data = ScoreBoardRest.getScoreBoardList()
     setContent {
         ScoreboardAppTheme {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
-            ) {
+            )
+            {
                 var presses by remember { mutableIntStateOf(0) }
                 Scaffold(
                     topBar = {
                         TopAppBar(
-
                             colors = topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 titleContentColor =  MaterialTheme.colorScheme.primary ,
@@ -128,7 +120,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                             }
                         )
                     },
-
             bottomBar = {
                 BottomAppBar(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -169,8 +160,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                             .padding(innerPadding)
                             .background(Color.White),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
-
-
                     ) {
                         GridView(LocalContext.current)
                     }
@@ -182,9 +171,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 }
 
-
-
-suspend fun coroutineFunction() :JSONArray{
+suspend fun getBackEndData() :JSONArray{
     delay(1000) // simulate a long-running operation
     //Build Score Data here
     return withContext(Dispatchers.IO) {
@@ -193,48 +180,36 @@ suspend fun coroutineFunction() :JSONArray{
 
 }
 
-fun updateScorboardData() : List<ScoreItem>
-{
-    println("Refreshing data")
-    scoreBoardList= ArrayList<ScoreItem>()
-    for (i in 0 until data.length()) {
-        val row = data.getJSONObject(i)
-        println("${row.get("teamName")} \t ${row.get("numActivities")} \t ${row.get("score")}")
-
-        scoreBoardList = scoreBoardList + ScoreItem(row.get("teamName").toString(),row.get("numActivities").toString().toInt(), row.get("score").toString().toInt(),  row.get("teamLogo").toString().toInt())
-    }
-    return scoreBoardList
-}
 // on below line we are creating grid view function for loading our grid view.
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun GridView(context: Context) {
-
-
-    //Get ScoreboardData from the API
-    //val data = ScoreBoardRest.getScoreBoardList()
-    // on below line we are creating and initializing our array list
+    //Build UI View of ScoreboardData from the API
     scoreBoardList= ArrayList<ScoreItem>()
 
     for (i in 0 until data.length()) {
         val row = data.getJSONObject(i)
-        //println("${row.get("teamName")} \t ${row.get("numActivities")} \t ${row.get("score")}")
-
-        scoreBoardList = scoreBoardList + ScoreItem(row.get("teamName").toString(),row.get("numActivities").toString().toInt(), row.get("score").toString().toInt(),  row.get("teamLogo").toString().toInt())
-        //println("Team " + row.get("teamName").toString() + " \n")
-        //scoreBoardList = scoreBoardList + ScoreItem(row.get("teamName").toString(),row.get("numActivities").toString().toInt(), row.get("score").toString().toInt(),  R.mipmap.ray_foreground)
-
-
+        scoreBoardList = scoreBoardList +
+                ScoreItem(  row.get("teamName").toString(),
+                            row.get("numActivities").toString().toInt(),
+                            row.get("score").toString().toInt(),
+                            row.get("teamLogo").toString().toInt())
     }
+
     Spacer(modifier = Modifier.height(9.dp))
 
-    Row {
-        Text(text = "            ")
+    Row (
+        Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+            .background(Color.White),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        )
+    {
         Text(text = "Logo", fontWeight = FontWeight.Bold, color = Color.Black)
-        Text(text = "            ")
         Text(text = "Team Name", fontWeight = FontWeight.Bold, color = Color.Black)
-        Text(text = "          ")
-        Text(text = "Score       ", fontWeight = FontWeight.Bold, color = Color.Black)
+        Text(text = "Score", fontWeight = FontWeight.Bold, color = Color.Black)
     }
 
     LazyVerticalGrid(
@@ -243,8 +218,7 @@ fun GridView(context: Context) {
             .padding(10.dp)
             .background(Color.White)
     ) {
-        // on below line we are displaying our
-        // items upto the size of the list.
+        // Display Scoreboard Items
         items(scoreBoardList.size) {
             Card(
                 onClick = {
@@ -255,7 +229,6 @@ fun GridView(context: Context) {
                         Toast.LENGTH_SHORT
                     ).show()
                 },
-
                 // on below line we are adding padding from our all sides.
                 modifier = Modifier.padding(8.dp),
             ) {
@@ -269,19 +242,15 @@ fun GridView(context: Context) {
                         horizontalArrangement = Arrangement.SpaceEvenly,
                 )
                 {
-
-
                     // on below line we are creating image for our grid view item.
                     Image(
                         // on below line we are specifying the drawable image for our image.
                         painter = painterResource(id = scoreBoardList[it].teamImg),
-                        //painter = painterResource(id = R.mipmap.elephant_foreground),
-
-                        contentDescription = "Team Icon",
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(60.dp)
-                            .padding(5.dp)
+                                    contentDescription = "Team Icon",
+                                    modifier = Modifier
+                                                .height(60.dp)
+                                                .width(60.dp)
+                                                .padding(5.dp)
                     )
                     Spacer(modifier = Modifier.height(9.dp))
 
@@ -290,13 +259,6 @@ fun GridView(context: Context) {
                         modifier = Modifier.padding(4.dp),
                         color = Color.DarkGray
                     )
-                    // on the below line we are adding a spacer.
-//                    Spacer(modifier = Modifier.height(9.dp))
-//
-//                    Text(
-//                        text = scoreBoardList[it].numActivities.toString(),
-//                        color = Color.DarkGray
-//                    )
 
                     Spacer(modifier = Modifier.height(9.dp))
 
@@ -304,15 +266,6 @@ fun GridView(context: Context) {
                         text = scoreBoardList[it].score.toString(),
                         color = Color.DarkGray
                     )
-
-//                    Spacer(modifier = Modifier.height(9.dp))
-//
-//                    Text(
-//                        text = scoreBoardList[it].teamImg.toString(),
-//                        color = Color.DarkGray
-//                    )
-
-
                 }
             }
         }
