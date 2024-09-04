@@ -10,16 +10,36 @@ class ScoreBoardAPI {
 
 
     companion object {
+        private val BASE_URL: String = "http://ec2-34-243-199-28.eu-west-1.compute.amazonaws.com:8080"
+        private val SCOREBOARD_API_URL: String = "$BASE_URL/scoreboard/table"
+        private val TEAMS_API_URL: String = "$BASE_URL/teams"
+
         suspend fun getScoreBoardData(): JSONArray {
             return withContext(Dispatchers.IO) { getScoreBoardDataList() }
         }
 
-        fun getScoreBoardDataList(): JSONArray {
+        suspend fun getScoreBoardDataList(): JSONArray {
+            return this.getScoreBoard()
+        }
 
-            val URL: String = "http://ec2-34-243-199-28.eu-west-1.compute.amazonaws.com:8080/scoreboard/table"
+        fun getScoreBoard() : JSONArray
+        {
+            return getAPIData(SCOREBOARD_API_URL)
+        }
 
+
+        suspend fun getTeamsData(): JSONArray {
+            return withContext(Dispatchers.IO) { getTeams() }
+        }
+
+        fun getTeams() : JSONArray
+        {
+            return getAPIData(TEAMS_API_URL)
+        }
+
+        fun getAPIData(url: String): JSONArray {
             val response: Response =
-                khttp.get(URL)
+                khttp.get(url)
             val statusCode = response.statusCode
             val data: JSONArray = response.jsonArray
 

@@ -11,6 +11,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,18 +26,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,6 +55,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
+import com.example.scoreboard_app.data.ScoreBoardAPI.Companion.getTeams
 import com.example.scoreboard_app.data.ScoreItem
 import com.example.scoreboard_app.ui.theme.ScoreboardAppTheme
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +66,7 @@ import org.json.JSONArray
 
 
 var data : JSONArray = JSONArray()
+var teams : JSONArray = JSONArray()
 var scoreBoardList: List<ScoreItem> = ArrayList<ScoreItem>()
 
 class GridViewActivity : ComponentActivity() {
@@ -66,7 +74,8 @@ class GridViewActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
        lifecycleScope.launch {
-            data = getBackEndData()
+            data = getScoreBoardData()
+            teams = getTeamsData()
         }
     }
 
@@ -78,7 +87,7 @@ class GridViewActivity : ComponentActivity() {
         lateinit var data: JSONArray
         lifecycleScope.launch {
         // Call your suspend function here, e.g., coroutineFunction()
-        data = getBackEndData()
+        data = com.example.scoreboard_app.getScoreBoardData()
     }
     setContent {
         ScoreboardAppTheme {
@@ -144,9 +153,7 @@ class GridViewActivity : ComponentActivity() {
                                 GridViewActivity::class.java
                             )
                             finish()
-                            overridePendingTransition(0, 0)
                             startActivity(i)
-                            overridePendingTransition(0, 0)
 
                         }) {
                             Icon(Icons.Default.Refresh, contentDescription = "Load")
@@ -171,13 +178,21 @@ class GridViewActivity : ComponentActivity() {
 }
 }
 
-suspend fun getBackEndData() :JSONArray{
+
+suspend fun getScoreBoardData() :JSONArray{
     delay(1000) // simulate a long-running operation
     //Build Score Data here
     return withContext(Dispatchers.IO) {
         getScoreBoardData()
     }
+}
 
+suspend fun getTeamsData() :JSONArray{
+    delay(1000) // simulate a long-running operation
+    //Build Score Data here
+    return withContext(Dispatchers.IO) {
+        getTeams()
+    }
 }
 
 // on below line we are creating grid view function for loading our grid view.
