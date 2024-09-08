@@ -27,7 +27,7 @@ class TeamsDropDown {
 
     @Preview
     @Composable
-    fun TeamsDD()
+    public fun TeamsDD()
     {
         val teams = arrayOf("Team 1", "Team 2", "Team 3", "Team 4", "Team 5")
         TeamsExposedDropDown()
@@ -84,5 +84,6 @@ class TeamsDropDown {
         }
     }
 
-    companion object
+
+
 }

@@ -13,6 +13,7 @@ class ScoreBoardAPI {
         private val BASE_URL: String = "http://ec2-34-243-199-28.eu-west-1.compute.amazonaws.com:8080"
         private val SCOREBOARD_API_URL: String = "$BASE_URL/scoreboard/table"
         private val TEAMS_API_URL: String = "$BASE_URL/teams"
+        private val ACTIVITIES_API_URL: String = "$BASE_URL/activities"
 
         suspend fun getScoreBoardData(): JSONArray {
             return withContext(Dispatchers.IO) { getScoreBoardDataList() }
@@ -35,6 +36,15 @@ class ScoreBoardAPI {
         fun getTeams() : JSONArray
         {
             return getAPIData(TEAMS_API_URL)
+        }
+
+        suspend fun getActivitiesData(): JSONArray {
+            return withContext(Dispatchers.IO) { getActivities() }
+        }
+
+        fun getActivities() : JSONArray
+        {
+            return getAPIData(ACTIVITIES_API_URL)
         }
 
         fun getAPIData(url: String): JSONArray {

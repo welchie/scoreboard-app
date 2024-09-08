@@ -34,4 +34,18 @@ class EndPointTest {
         assertNotNull(data);
     }
 
+    @Test
+    fun getActivitiesTest()
+    {
+        val data = ScoreBoardAPI.getActivities()
+        println("Number of Activities ${data.length()}")
+
+        println("Activity Name \t Description \t Max Score \t Zone \t Id")
+        for (i in 0 until data.length()) {
+            val row = data.getJSONObject(i)
+            println("${row.get("name")} \t ${row.get("description")} \t ${row.get("maxScore")} \t ${row.get("zone")} \t ${row.get("id")}")
+        }
+        assertNotNull(data);
+    }
+
 }
