@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name="ScoreBoardActivity"
+            android:name="uk.org.pentlandscouts.scoreboard_app.ui.ScoreBoardActivity"
             android:exported="true"
             android:label="ScoreBoardActivity"
             android:theme="@style/Theme.ScoreboardApp">
@@ -29,9 +29,21 @@
         </activity>
 
         <activity
-            android:name="AddScoreActivity"
+            android:name="uk.org.pentlandscouts.scoreboard_app.ui.AddScoreActivity"
             android:exported="true"
             android:label="AddScoreActivity"
+            android:theme="@style/Theme.ScoreboardApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="uk.org.pentlandscouts.scoreboard_app.ui.NavigationActivity"
+            android:exported="true"
+            android:label="NavigationActivity"
             android:theme="@style/Theme.ScoreboardApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

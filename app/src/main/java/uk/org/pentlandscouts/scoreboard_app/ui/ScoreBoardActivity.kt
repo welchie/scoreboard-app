@@ -1,4 +1,4 @@
-package com.example.scoreboard_app
+package uk.org.pentlandscouts.scoreboard_app.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -51,9 +51,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.example.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
-import com.example.scoreboard_app.data.ScoreItem
-import com.example.scoreboard_app.ui.theme.ScoreboardAppTheme
+import com.example.scoreboard_app.R
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
+import uk.org.pentlandscouts.scoreboard_app.theme.ScoreboardAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -80,7 +81,7 @@ class ScoreBoardActivity : ComponentActivity() {
 
         lifecycleScope.launch {
         // Call your suspend function here, e.g., coroutineFunction()
-        data = com.example.scoreboard_app.getScoreBoardData()
+        data = uk.org.pentlandscouts.scoreboard_app.ui.getScoreBoardData()
     }
     setContent {
         ScoreboardAppTheme {
@@ -98,31 +99,7 @@ class ScoreBoardActivity : ComponentActivity() {
                                 titleContentColor =  MaterialTheme.colorScheme.primary ,
                             ),
                             title = {
-                                Row {
-
-                                    Image(
-                                        // on below line we are specifying the drawable image for our image.
-                                        painter = painterResource(id =R.mipmap.pentland_logo_x2_foreground),
-                                        //painter = painterResource(id = R.mipmap.elephant_foreground),
-
-                                        contentDescription = "Scouts icon",
-                                        modifier = Modifier
-                                            .height(150.dp)
-                                            .width(150.dp)
-                                            .padding(5.dp)
-                                            .background(Color.Transparent)
-                                            .align(Alignment.CenterVertically)
-                                    )
-                                    Spacer(modifier = Modifier.height(9.dp))
-                                    // in the top bar we are specifying tile as a text
-                                    Text(
-                                        text = "Scoreboard App",
-                                        modifier = Modifier.fillMaxWidth()
-                                            .align(Alignment.CenterVertically),
-                                        textAlign = TextAlign.Justify,
-
-                                    )
-                                }
+                             NavTopBar.TopBarNav()
                             }
                         )
                     },
@@ -131,19 +108,7 @@ class ScoreBoardActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.primary ,
                 ) {
-                    Row()
-                    {
-                        Column()
-                        {
-
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                                text = "Pentland Scouts",
-                            )
-                        }
-                    }
+                    NavBottomBar.BottomBarNav()
                 }
             },
                     floatingActionButton = {
@@ -192,12 +157,13 @@ suspend fun getScoreBoardData() :JSONArray{
     }
 }
 
+
 // on below line we are creating grid view function for loading our grid view.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScoreBoardView(context: Context) {
     //Build UI View of ScoreboardData from the API
-    scoreBoardList= ArrayList()
+    scoreBoardList = ArrayList()
 
     for (i in 0 until data.length()) {
         val row = data.getJSONObject(i)

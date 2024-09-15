@@ -1,6 +1,6 @@
 package com.example.scoreboard_app
 
-import com.example.scoreboard_app.data.ScoreBoardAPI
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 

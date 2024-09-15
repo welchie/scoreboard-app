@@ -1,4 +1,4 @@
-package com.example.scoreboard_app
+package uk.org.pentlandscouts.scoreboard_app.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -19,9 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.scoreboard_app.data.ScoreBoardAPI
-import org.json.JSONArray
-import org.json.JSONObject
 
 class TeamsDropDown {
 

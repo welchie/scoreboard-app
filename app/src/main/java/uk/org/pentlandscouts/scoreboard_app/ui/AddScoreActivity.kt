@@ -1,8 +1,7 @@
-package com.example.scoreboard_app
+package uk.org.pentlandscouts.scoreboard_app.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -18,16 +17,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -49,9 +44,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.example.scoreboard_app.data.ScoreBoardAPI.Companion.getActivities
-import com.example.scoreboard_app.data.ScoreBoardAPI.Companion.getTeams
-import com.example.scoreboard_app.ui.theme.ScoreboardAppTheme
+import com.example.scoreboard_app.R
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getActivities
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getTeams
+import uk.org.pentlandscouts.scoreboard_app.theme.ScoreboardAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -96,27 +92,7 @@ class AddScoreActivity : ComponentActivity() {
                                 titleContentColor =  MaterialTheme.colorScheme.primary ,
                             ),
                             title = {
-                                Row {
-
-                                    Image(
-                                        // on below line we are specifying the drawable image for our image.
-                                        painter = painterResource(id =R.mipmap.scout_logo_foreground),
-                                        //painter = painterResource(id = R.mipmap.elephant_foreground),
-
-                                        contentDescription = "Scouts icon",
-                                        modifier = Modifier
-                                            .height(60.dp)
-                                            .width(60.dp)
-                                            .padding(5.dp)
-                                            .background(Color.Transparent)
-                                    )
-                                    // in the top bar we are specifying tile as a text
-                                    Text(
-                                        text = "Scoreboard App",
-                                        modifier = Modifier.fillMaxWidth(),
-                                        textAlign = TextAlign.Justify,
-                                    )
-                                }
+                                NavTopBar.TopBarNav()
                             }
                         )
                     },
@@ -125,12 +101,7 @@ class AddScoreActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.primary ,
                 ) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        text = "Pentland Scouts",
-                    )
+                    NavBottomBar.BottomBarNav()
                 }
             },
 

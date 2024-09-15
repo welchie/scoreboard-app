@@ -1,4 +1,4 @@
-package com.example.scoreboard_app.data
+package uk.org.pentlandscouts.scoreboard_app.data
 
 // on below line we are creating a
 // modal class for our data class.

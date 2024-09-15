@@ -1,4 +1,4 @@
-package com.example.scoreboard_app.ui.theme
+package uk.org.pentlandscouts.scoreboard_app.theme
 
 import android.app.Activity
 import android.os.Build

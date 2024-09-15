@@ -1,4 +1,4 @@
-package com.example.scoreboard_app.data
+package uk.org.pentlandscouts.scoreboard_app.data
 
 import khttp.responses.Response
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ class ScoreBoardAPI {
         }
 
         suspend fun getScoreBoardDataList(): JSONArray {
-            return this.getScoreBoard()
+            return getScoreBoard()
         }
 
         fun getScoreBoard() : JSONArray
