@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -40,6 +41,7 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,6 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.scoreboard_app.R
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
@@ -64,6 +67,7 @@ import org.json.JSONArray
 
 var data : JSONArray = JSONArray()
 var scoreBoardList: List<ScoreItem> = ArrayList()
+var selectedContent: String = "ScoreBoard"
 
 class ScoreBoardActivity : ComponentActivity() {
 
@@ -90,7 +94,6 @@ class ScoreBoardActivity : ComponentActivity() {
                 color = MaterialTheme.colorScheme.background
             )
             {
-                var presses by remember { mutableIntStateOf(0) }
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -108,15 +111,19 @@ class ScoreBoardActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.primary ,
                 ) {
+
                     NavBottomBar.BottomBarNav()
                 }
             },
+
                     floatingActionButton = {
-                        FloatingActionButton(onClick = { Toast.makeText(
-                            this,
-                            "Refreshing...",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        FloatingActionButton(onClick = {
+                            Toast.makeText(
+                                this,
+                                "Refreshing...",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            ScoreBoardActivity.setContent("ScoreBoard")
                             val i = Intent(
                                 this@ScoreBoardActivity,
                                 ScoreBoardActivity::class.java
@@ -125,9 +132,11 @@ class ScoreBoardActivity : ComponentActivity() {
                             startActivity(i)
 
                         }) {
-                            Icon(Icons.Default.Refresh, contentDescription = "Load")
+                            Icon(Icons.Default.Refresh, contentDescription = "Refresh")
                         }
+
                     }
+
                 )
 
                 { innerPadding ->
@@ -137,7 +146,11 @@ class ScoreBoardActivity : ComponentActivity() {
                             .background(Color.White),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        ScoreBoardView(LocalContext.current)
+                        if (selectedContent == "ScoreBoard")
+                            ScoreBoardView(LocalContext.current)
+                        if (selectedContent == "AddScore")
+                            AddScoreView(context = LocalContext.current)
+
                     }
                 }
 
@@ -145,6 +158,13 @@ class ScoreBoardActivity : ComponentActivity() {
         }
     }
 }
+
+    companion object {
+        fun setContent(s:String)
+        {
+            selectedContent = s
+        }
+    }
 }
 
 
@@ -156,7 +176,6 @@ suspend fun getScoreBoardData() :JSONArray{
         getScoreBoardData()
     }
 }
-
 
 // on below line we are creating grid view function for loading our grid view.
 @OptIn(ExperimentalMaterial3Api::class)

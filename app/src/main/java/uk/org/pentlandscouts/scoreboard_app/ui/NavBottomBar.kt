@@ -1,46 +1,49 @@
 package uk.org.pentlandscouts.scoreboard_app.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.example.scoreboard_app.R
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat.recreate
+import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 
 class NavBottomBar {
+    
     companion object {
         @Composable
         fun BottomBarNav() {
-            var home by remember { mutableIntStateOf(0) }
-            var menu by remember { mutableIntStateOf(0) }
+                //var home by remember { mutableIntStateOf(0) }
+            //var selectedContent by remember { mutableStateOf("AddScore") }
             var refresh by remember { mutableIntStateOf(0)}
+
+            val navController = rememberNavController()
 
             Row()
             {
 
-                Button(onClick = { home++ }) {
+                Button(onClick = {
+                    ScoreBoardActivity.setContent("ScoreBoard")
+                }) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
@@ -52,7 +55,9 @@ class NavBottomBar {
                         Text(text = "Home")
                     }
                 }
-                Button(onClick = { refresh++ }) {
+                Button(onClick = {
+                    ScoreBoardActivity.setContent("AddScore")
+                }) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
@@ -77,9 +82,18 @@ class NavBottomBar {
                     }
                 }
             }
+            
 
+        }
+
+        @Composable
+        private fun navigateToScoreView() {
+            val navController = rememberNavController()
+            navController.navigate(AddScoreView(context = LocalContext.current))
         }
     }
 
 }
+
+
 
