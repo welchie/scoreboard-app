@@ -10,7 +10,7 @@ class ScoreBoardAPI {
 
 
     companion object {
-        private val BASE_URL: String = "http://ec2-34-243-199-28.eu-west-1.compute.amazonaws.com:8080"
+        private val BASE_URL: String = "http://ec2-3-250-117-19.eu-west-1.compute.amazonaws.com:8080"
         private val SCOREBOARD_API_URL: String = "$BASE_URL/scoreboard/table"
         private val TEAMS_API_URL: String = "$BASE_URL/teams"
         private val ACTIVITIES_API_URL: String = "$BASE_URL/activities"

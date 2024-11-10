@@ -29,13 +29,12 @@ class NavTopBar {
 
                 Image(
                     // on below line we are specifying the drawable image for our image.
-                    painter = painterResource(id = R.mipmap.pentland_logo_x2_foreground),
-                    //painter = painterResource(id = R.mipmap.elephant_foreground),
-
+                    painter = painterResource(id = R.mipmap.pentland_logo_x2_foreground ),
+                    //R.mipmap.pentland_logo_x2_foreground),
                     contentDescription = "Scouts icon",
                     modifier = Modifier
-                        .height(150.dp)
-                        .width(150.dp)
+                        .height(50.dp)
+                        .width(50.dp)
                         .padding(5.dp)
                         .background(Color.Transparent)
                         .align(Alignment.CenterVertically)

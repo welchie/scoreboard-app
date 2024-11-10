@@ -10,5 +10,5 @@ data class ScoreItem(
 
     val score: Int,
 
-    val teamImg: Int
+    val teamImg: String
 )

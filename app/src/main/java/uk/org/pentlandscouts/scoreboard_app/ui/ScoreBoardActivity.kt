@@ -39,22 +39,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.scoreboard_app.R
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
 import uk.org.pentlandscouts.scoreboard_app.theme.ScoreboardAppTheme
@@ -63,6 +55,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import uk.org.pentlandscouts.scoreboard_app.theme.Purple40
+import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 
 var data : JSONArray = JSONArray()
@@ -98,7 +92,9 @@ class ScoreBoardActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             colors = topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                containerColor = Purple40,
+
+                                //MaterialTheme.colorScheme.,
                                 titleContentColor =  MaterialTheme.colorScheme.primary ,
                             ),
                             title = {
@@ -108,11 +104,11 @@ class ScoreBoardActivity : ComponentActivity() {
                     },
             bottomBar = {
                 BottomAppBar(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.primary ,
                 ) {
 
-                    NavBottomBar.BottomBarNav()
+                    NavBottomBar.BottomBarNav2()
                 }
             },
 
@@ -146,7 +142,7 @@ class ScoreBoardActivity : ComponentActivity() {
                             .background(Color.White),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        if (selectedContent == "ScoreBoard")
+                       // if (selectedContent == "ScoreBoard")
                             ScoreBoardView(LocalContext.current)
                         if (selectedContent == "AddScore")
                             AddScoreView(context = LocalContext.current)
@@ -190,7 +186,7 @@ fun ScoreBoardView(context: Context) {
                 ScoreItem(  row.get("teamName").toString(),
                             row.get("numActivities").toString().toInt(),
                             row.get("score").toString().toInt(),
-                            row.get("teamLogo").toString().toInt())
+                            row.get("teamLogo").toString())
     }
 
     Spacer(modifier = Modifier.height(9.dp))
@@ -241,9 +237,13 @@ fun ScoreBoardView(context: Context) {
                 )
                 {
                     // on below line we are creating image for our grid view item.
+
                     Image(
                         // on below line we are specifying the drawable image for our image.
-                        painter = painterResource(id = scoreBoardList[it].teamImg),
+
+                        //Get the resourceId from MipMap
+                        //var resID = ResourceUtils.getResourceIdFromMipMap(scoreBoardList[it].teamName)
+                        painter = painterResource(id = ResourceUtils.getResourceIdFromMipMap(scoreBoardList[it].teamImg)),
                                     contentDescription = "Team Icon",
                                     modifier = Modifier
                                         .height(60.dp)
@@ -254,6 +254,7 @@ fun ScoreBoardView(context: Context) {
 
                     Text(
                         text = scoreBoardList[it].teamName,
+                        //scoreBoardList[it].teamName,
                         modifier = Modifier.padding(4.dp),
                         color = Color.DarkGray
                     )

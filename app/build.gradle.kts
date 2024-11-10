@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.scoreboard_app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.scoreboard_app"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -30,11 +30,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -73,15 +73,34 @@ dependencies {
 
 
     // https://mvnrepository.com/artifact/androidx.compose.foundation/foundation
-    runtimeOnly("androidx.compose.foundation:foundation:1.6.8")
+    runtimeOnly(libs.androidx.foundation)
 
-    implementation("br.com.devsrsouza.compose.icons:erikflowers-weather-icons:1.1.0")
+    implementation(libs.erikflowers.weather.icons)
     // https://mvnrepository.com/artifact/org.danilopianini/khttp
-    implementation ("org.danilopianini:khttp:1.6.3")
+    implementation (libs.khttp)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation(libs.androidx.lifecycle.runtime.ktx.v241)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.material)
+    implementation (libs.androidx.navigation.fragment.ktx)
+    implementation (libs.androidx.navigation.ui.ktx)
+    // https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended
+    runtimeOnly(libs.androidx.material.icons.extended.v173)
+    // https://mvnrepository.com/artifact/androidx.compose.material/material-icons-core
+    runtimeOnly(libs.androidx.material.icons.core)
+
+
+
+    implementation(libs.material3)
+    implementation(libs.androidx.material3.adaptive.navigation.suite)
+    implementation (libs.androidx.material)
+
+    // https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended
+    implementation(libs.androidx.material.icons.extended.v173)
+
+
+
 
 }
 
