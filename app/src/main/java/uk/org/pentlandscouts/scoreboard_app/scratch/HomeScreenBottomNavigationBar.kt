@@ -29,12 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.snap40.mobile.feature_common.nav_graph.Route
-import com.snap40.mobile.feature_main.domain.model.HomeScreenBottomNavigationItem
-import com.snap40.mobile.ui.theme.TabBackground
-import com.snap40.mobile.ui.theme.TabHighLightBackground
-import com.snap40.mobile.ui.theme.TabUnSelectedBackground
-import com.snap40.mobile.ui.theme.White
+import uk.org.pentlandscouts.scoreboard_app.theme.TabBackground
+import uk.org.pentlandscouts.scoreboard_app.theme.TabHighLightBackground
+import uk.org.pentlandscouts.scoreboard_app.theme.TabUnSelectedBackground
+import uk.org.pentlandscouts.scoreboard_app.theme.White
 
 @Composable
 fun HomeScreenBottomNavigationBar(navigate: (String) -> Unit) {

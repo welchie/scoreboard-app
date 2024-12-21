@@ -2,4 +2,11 @@
     <string name="app_name">Scoreboard-App</string>
     <string name="home_icon">Home Icon</string>
 
+
+        <string name="patients">Patients</string>
+        <string name="calendar">Calendar</string>
+        <string name="alarms">Alarms</string>
+        <string name="support">Support</string>
+        <string name="profile">Profile</string>
+
 </resources>
