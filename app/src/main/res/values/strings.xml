@@ -9,4 +9,11 @@
         <string name="support">Support</string>
         <string name="profile">Profile</string>
 
+    <string name="post_notification_permanently_declined">Notification is required to monitor critical patients regularly. Please grant the permission from app settings.</string>
+    <string name="post_notification_request">App needs notification permission to keep track of patients.</string>
+
+    <string name="grant_permission">Grant Permission</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="search_hint">search_hint</string>
+    <string name="ok">OK</string>
 </resources>

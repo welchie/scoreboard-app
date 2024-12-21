@@ -14,4 +14,5 @@ sealed class Route(
     object AlarmScreen : Route(route = "alarmScreen")
     object SupportScreen : Route(route = "supportScreen")
     object ProfileScreen : Route(route = "profileScreen")
+    object TeamsDropDown : Route(route = "teamsDropdown")
 }

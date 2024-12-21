@@ -39,6 +39,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +59,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import uk.org.pentlandscouts.scoreboard_app.scratch.HomeScreenBottomNavigationBar
+import uk.org.pentlandscouts.scoreboard_app.scratch.Route
 import uk.org.pentlandscouts.scoreboard_app.theme.Purple40
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
@@ -64,6 +70,7 @@ var scoreBoardList: List<ScoreItem> = ArrayList()
 var selectedContent: String = "ScoreBoard"
 
 class ScoreBoardActivity : ComponentActivity() {
+
 
     override fun onStart() {
         super.onStart()
@@ -108,7 +115,10 @@ class ScoreBoardActivity : ComponentActivity() {
                     contentColor = MaterialTheme.colorScheme.primary ,
                 ) {
 
-                    NavBottomBar.BottomBarNav2()
+                    var currentScreen by remember { mutableStateOf(Route.TeamsDropDown.route) }
+                    //NavBottomBar.BottomBarNav2()
+                    HomeScreenBottomNavigationBar { route ->
+                        currentScreen = route }
                 }
             },
 

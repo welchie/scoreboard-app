@@ -81,6 +81,12 @@ class TeamsDropDown {
         }
     }
 
-
+companion object{
+    @Composable
+    fun TeamsDD()
+    {
+        TeamsDD()
+    }
+}
 
 }

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.2"
+agp = "8.7.2"
 erikflowersWeatherIcons = "1.1.0"
 foundation = "1.7.3"
 khttp = "1.6.3"
@@ -28,6 +28,9 @@ pagingCommonAndroid = "3.3.2"
 tracingPerfettoHandshake = "1.0.0"
 navigationRuntimeKtx = "2.8.2"
 navigationCompose = "2.8.2"
+hilt-android-version = "2.52"
+hilt-compiler = "2.52"
+hilt-navigation-compose = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,9 +67,12 @@ khttp = { module = "org.danilopianini:khttp", version.ref = "khttp" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
-
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android-version" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt-compiler" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref ="hilt-android-version"}
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

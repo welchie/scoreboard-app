@@ -99,7 +99,9 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended
     implementation(libs.androidx.material.icons.extended.v173)
 
-
+    //hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
 
 
 }

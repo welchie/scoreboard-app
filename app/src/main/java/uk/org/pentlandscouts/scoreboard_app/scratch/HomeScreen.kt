@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,20 +42,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.snap40.mobile.R
-import com.snap40.mobile.feature_alarms.presentation.AlarmScreen
-import com.snap40.mobile.feature_calendar.presentation.CalendarScreen
-import com.snap40.mobile.feature_common.nav_graph.Route
-import com.snap40.mobile.feature_main.data.repository.PostNotificationTextProviderImpl
-import com.snap40.mobile.feature_main.presentation.PermissionDialog
+import com.example.scoreboard_app.R
 import com.snap40.mobile.feature_main.presentation.viewmodels.HomeScreenViewModel
-import com.snap40.mobile.feature_patient.presentation.screens.PatientScreen
-import com.snap40.mobile.feature_patient.presentation.viewmodels.PatientScreenViewModel
-import com.snap40.mobile.feature_profile.presentation.screens.ProfileScreen
-import com.snap40.mobile.feature_signin.presentation.screens.SignInSupport
-import com.snap40.mobile.ui.theme.Black
-import com.snap40.mobile.ui.theme.ScreenBackground
-import com.snap40.mobile.ui.theme.TabBackground
+import uk.org.pentlandscouts.scoreboard_app.theme.ScreenBackground
+import uk.org.pentlandscouts.scoreboard_app.theme.TabBackground
 
 @Composable
 fun HomeScreen(navigate: (String) -> Unit, patientScreenViewModel: PatientScreenViewModel) {
@@ -166,10 +157,6 @@ fun HomeScreen(navigate: (String) -> Unit, patientScreenViewModel: PatientScreen
 
                     when (currentScreen) {
                         Route.PatientScreen.route -> PatientScreen(patientScreenViewModel)
-                        Route.CalendarScreen.route -> CalendarScreen()
-                        Route.AlarmScreen.route -> AlarmScreen()
-                        Route.SupportScreen.route -> SignInSupport(navigate)
-                        Route.ProfileScreen.route -> ProfileScreen()
                     }
                 }
             }

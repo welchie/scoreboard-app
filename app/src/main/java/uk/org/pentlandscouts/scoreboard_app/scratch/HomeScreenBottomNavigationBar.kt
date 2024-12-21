@@ -42,7 +42,7 @@ fun HomeScreenBottomNavigationBar(navigate: (String) -> Unit) {
         HomeScreenBottomNavigationItem.Calendar,
         HomeScreenBottomNavigationItem.Alarms,
         HomeScreenBottomNavigationItem.Support,
-        HomeScreenBottomNavigationItem.Profile
+        HomeScreenBottomNavigationItem.Profile,
     )
     var selectedItem by remember { mutableIntStateOf(0) }
     var currentRoute by remember { mutableStateOf(Route.PatientScreen.route) }
