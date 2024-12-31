@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoreboardApp"
         tools:targetApi="35"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true">
 
         <activity
             android:name="uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardActivity"

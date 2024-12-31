@@ -23,20 +23,29 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
 import uk.org.pentlandscouts.scoreboard_app.ui.data
+import uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.ui.scoreBoardList
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 @Composable
-fun ScoreboardScreen( context: Context) {
+fun ScoreboardScreen(context: Context) {
 
+
+    val scoreBoardViewModel = viewModel<ScoreboardViewModel>()
+    val isLoading by scoreBoardViewModel.isLoading.collectAsStateWithLifecycle()
+
+    val data = scoreBoardViewModel.data
     //Build UI View of ScoreboardData from the API
     scoreBoardList = ArrayList()
 

@@ -17,11 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import uk.org.pentlandscouts.scoreboard_app.theme.Purple40
 import uk.org.pentlandscouts.scoreboard_app.theme.ScoreboardAppTheme
+import uk.org.pentlandscouts.scoreboard_app.ui.data
+import uk.org.pentlandscouts.scoreboard_app.ui.getScoreBoardData
 import uk.org.pentlandscouts.scoreboard_app.ui.navapp.components.ScoreboardTabRow
 import uk.org.pentlandscouts.scoreboard_app.ui.navapp.topbar.TopBarScreen
 
@@ -70,18 +74,10 @@ fun ScoreboardApp()
                     currentScreen = currentScreen
                 )
 
-            },
-            floatingActionButton = {
-                FloatingActionButton(onClick = { refresh++ }) {
-                    Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-                }
             }
 
-
         ) { innerPadding ->
-            //val scoreBoardViewModel = viewModel<ScoreboardViewModel>()
-            //val isLoading by scoreBoardViewModel.isLoading.collectAsStateWithLifecycle()
-            ScorboardNavHost(
+                ScorboardNavHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding)
             )
