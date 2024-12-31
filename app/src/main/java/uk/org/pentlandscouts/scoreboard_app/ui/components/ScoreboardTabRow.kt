@@ -1,4 +1,4 @@
-package uk.org.pentlandscouts.scoreboard_app.ui.navapp.components
+package uk.org.pentlandscouts.scoreboard_app.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -29,7 +29,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardDestination
+import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardDestination
 import java.util.Locale
 
 @Composable

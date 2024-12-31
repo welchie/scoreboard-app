@@ -1,4 +1,4 @@
-package uk.org.pentlandscouts.scoreboard_app.ui.navapp.scoreboard
+package uk.org.pentlandscouts.scoreboard_app.ui.scoreboard
 
 import android.content.Context
 import android.widget.Toast
@@ -18,15 +18,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,25 +32,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.json.JSONArray
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
-import uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardViewModel
-import uk.org.pentlandscouts.scoreboard_app.ui.scoreBoardList
+import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 @Composable
 fun ScoreboardScreen(viewModel: ScoreboardViewModel, context: Context) {
 
     val data: JSONArray
-    //val scoreboardViewModel = viewModel<ScoreboardViewModel>()
+    var scoreBoardList: List<ScoreItem>
+    scoreBoardList = ArrayList()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     //Build UI View of ScoreboardData from the API
     when(isLoading)
     {
         ScoreboardViewModel.State.Loading ->  CircularProgressIndicator() // Show loading
         else -> {
-            scoreBoardList = ArrayList()
+           // scoreBoardList = ArrayList()
             data = viewModel.scoreboardData
             for (i in 0 until data.length()) {
                 val row = data.getJSONObject(i)

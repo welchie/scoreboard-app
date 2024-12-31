@@ -1,4 +1,4 @@
-package uk.org.pentlandscouts.scoreboard_app.ui.navapp.topbar
+package uk.org.pentlandscouts.scoreboard_app.ui.topbar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

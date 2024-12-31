@@ -1,4 +1,4 @@
-package uk.org.pentlandscouts.scoreboard_app.ui.navapp.activities
+package uk.org.pentlandscouts.scoreboard_app.ui.teams
 
 import android.content.Context
 import android.widget.Toast
@@ -16,14 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -40,37 +37,56 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.json.JSONArray
-import uk.org.pentlandscouts.scoreboard_app.data.ActivityItem
-import uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardViewModel
-import uk.org.pentlandscouts.scoreboard_app.ui.navapp.teams.TeamsScreen
-import uk.org.pentlandscouts.scoreboard_app.ui.scoreBoardList
+import uk.org.pentlandscouts.scoreboard_app.data.TeamItem
+import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 @Composable
-fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
+fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
 {
-
-    var activitiesData: JSONArray = JSONArray()
-    var activitiesList: List<ActivityItem> = ArrayList()
+    val teamsData: JSONArray
+    var teamsList: List<TeamItem>
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     when(isLoading) {
         ScoreboardViewModel.State.Loading -> CircularProgressIndicator() // Show loading
 
         else -> {
-            activitiesList = ArrayList()
-            activitiesData = viewModel.activities
-            for (i in 0 until activitiesData.length()) {
-                val row = activitiesData.getJSONObject(i)
-                activitiesList = activitiesList +
-                        ActivityItem(
+            teamsList = ArrayList()
+            teamsData = viewModel.teamsData
+            for (i in 0 until teamsData.length()) {
+                val row = teamsData.getJSONObject(i)
+                teamsList = teamsList +
+                        TeamItem(
                             row.get("name").toString(),
-                            row.get("description").toString(),
-                            row.get("maxScore").toString().toInt(),
-                            row.get("zone").toString(),
-                            row.get("id").toString().toInt()
+                            row.get("id").toString().toInt(),
+                            row.get("logo").toString(),
                         )
             }
+
+            Spacer(modifier = Modifier.height(9.dp))
+
+            Row(
+                Modifier
+                    .padding(5.dp)
+                    .background(Color.White)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.Start,
+            )
+            {
+                Icon(Icons.Default.Person, contentDescription = "Teams")
+                Text(text = "Teams", fontWeight = FontWeight.Bold, color = Color.Black)
+            }
+
+            Row()
+            {
+                Column()
+                {
+                    Text(text = "Teams")
+                }
+            }
+
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1),
@@ -78,48 +94,47 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
                     .padding(5.dp)
                     .background(Color.White)
             ) {
-
-
                 // Display Scoreboard Items
-                items(activitiesList.size) {
+                items(teamsList.size) {
+
 
                     Card(
                         onClick = {
                             // inside on click we are displaying the toast message.
                             Toast.makeText(
                                 context,
-                                "Show " + activitiesList[it].name + " `Details`..",
+                                "Show " + teamsList[it].teamName + " Team",
                                 Toast.LENGTH_SHORT
                             ).show()
                         },
                         // on below line we are adding padding from our all sides.
                         modifier = Modifier.padding(8.dp),
                     ) {
-
+                        // on below line we are creating a column on below sides.
                         Row(
                             modifier = Modifier.background(Color.White)
                         )
                         {
-                            Spacer(modifier = Modifier.width(10.dp))
+                            Spacer(modifier = Modifier.width(35.dp))
                             Text(
-                                text = "Zone",
+                                text = "Logo",
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
-                            Spacer(modifier = Modifier.width(25.dp))
+                            Spacer(modifier = Modifier.width(50.dp))
                             Text(
-                                text = "Activity Name",
+                                text = "Team Name",
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
                             Spacer(modifier = Modifier.width(20.dp))
                             Text(
-                                text = "Max Score",
+                                text = "ID",
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
                             )
 
-                            Spacer(modifier = Modifier.width(20.dp))
+                            Spacer(modifier = Modifier.width(40.dp))
                             Text(
                                 text = "Edit",
                                 fontWeight = FontWeight.Bold,
@@ -127,7 +142,6 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
                             )
                             Spacer(modifier = Modifier.width(50.dp))
                         }
-                        // on below line we are creating a column on below sides.
                         Row(
                             Modifier
                                 .fillMaxSize()
@@ -138,39 +152,53 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
                         )
                         {
                             // on below line we are creating image for our grid view item.
+
+                            Image(
+                                // on below line we are specifying the drawable image for our image.
+
+                                //Get the resourceId from MipMap
+                                //var resID = ResourceUtils.getResourceIdFromMipMap(scoreBoardList[it].teamName)
+                                painter = painterResource(
+                                    id = ResourceUtils.getResourceIdFromMipMap(
+                                        teamsList[it].logo
+                                    )
+                                ),
+                                contentDescription = "Team Icon",
+                                modifier = Modifier
+                                    .height(60.dp)
+                                    .width(60.dp)
+                                    .padding(5.dp)
+                            )
+                            Spacer(modifier = Modifier.height(9.dp))
+
                             Text(
-                                text = activitiesList[it].zone.toString(),
+                                text = teamsList[it].teamName,
+                                //scoreBoardList[it].teamName,
+                                modifier = Modifier.padding(4.dp),
                                 color = Color.DarkGray
                             )
 
                             Spacer(modifier = Modifier.height(9.dp))
 
                             Text(
-                                text = activitiesList[it].name,
-                                modifier = Modifier.padding(4.dp),
+                                text = teamsList[it].id.toString(),
                                 color = Color.DarkGray
                             )
 
-                            Spacer(modifier = Modifier.width(20.dp))
 
-                            Text(
-                                text = activitiesList[it].maxScore.toString(),
-                                color = Color.DarkGray
-                            )
 
-                            Spacer(modifier = Modifier.width(40.dp))
                             OutlinedButton(
                                 onClick = {
                                     Toast.makeText(
                                         context,
-                                        "Navigate to Edit Activity: " + activitiesList[it].name,
+                                        "Navigate to Edit  Team: " + teamsList[it].teamName,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 },
                                 contentPadding = PaddingValues(5.dp),
                             )
                             {
-                                Icon(Icons.Default.Edit, contentDescription = "Edit Activity")
+                                Icon(Icons.Default.Edit, contentDescription = "Edit")
                             }
                         }
                     }
@@ -178,12 +206,12 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
             }
         }
     }
-
 }
 
-@Preview
 @Composable
-fun ActivitesScreenPrev()
+@Preview
+fun TeamsPreview()
 {
-    ActivitiesScreen(viewModel = viewModel(), context = LocalContext.current)
+    TeamsScreen(viewModel = viewModel(), context = LocalContext.current)
 }
+

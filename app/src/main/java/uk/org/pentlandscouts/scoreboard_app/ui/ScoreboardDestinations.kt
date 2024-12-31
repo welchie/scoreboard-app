@@ -1,4 +1,4 @@
-package uk.org.pentlandscouts.scoreboard_app.ui.navapp
+package uk.org.pentlandscouts.scoreboard_app.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Accessibility

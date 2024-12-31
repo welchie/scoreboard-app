@@ -1,4 +1,4 @@
-package uk.org.pentlandscouts.scoreboard_app.ui.navapp
+package uk.org.pentlandscouts.scoreboard_app.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,9 +7,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import uk.org.pentlandscouts.scoreboard_app.ui.navapp.activities.ActivitiesScreen
-import uk.org.pentlandscouts.scoreboard_app.ui.navapp.scoreboard.ScoreboardScreen
-import uk.org.pentlandscouts.scoreboard_app.ui.navapp.teams.TeamsScreen
+import uk.org.pentlandscouts.scoreboard_app.ui.activities.ActivitiesScreen
+import uk.org.pentlandscouts.scoreboard_app.ui.scoreboard.ScoreboardScreen
+import uk.org.pentlandscouts.scoreboard_app.ui.teams.TeamsScreen
 
 @Composable
 fun ScorboardNavHost(

@@ -1,21 +1,14 @@
-package uk.org.pentlandscouts.scoreboard_app.ui.navapp
+package uk.org.pentlandscouts.scoreboard_app.ui
 
-import android.os.Bundle
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getActivities
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getActivitiesData
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getTeamsData
