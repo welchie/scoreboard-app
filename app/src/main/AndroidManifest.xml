@@ -20,7 +20,7 @@
         <activity
             android:name="uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardActivity"
             android:exported="true"
-            android:label="ScoreBoardActivity"
+            android:label="ScoreBoard App"
             android:theme="@style/Theme.ScoreboardApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,41 +29,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="uk.org.pentlandscouts.scoreboard_app.ui.AddScoreActivity"
-            android:exported="true"
-            android:label="AddScoreActivity"
-            android:theme="@style/Theme.ScoreboardApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="uk.org.pentlandscouts.scoreboard_app.ui.NavigationActivity"
-            android:exported="true"
-            android:label="NavigationActivity"
-            android:theme="@style/Theme.ScoreboardApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="uk.org.pentlandscouts.scoreboard_app.ui.ScaffoldSampleActivity"
-            android:exported="true"
-            android:label="ScaffoldSampleActivity"
-            android:theme="@style/Theme.ScoreboardApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

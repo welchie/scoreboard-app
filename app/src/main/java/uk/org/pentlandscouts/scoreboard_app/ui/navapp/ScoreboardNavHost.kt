@@ -14,7 +14,8 @@ import uk.org.pentlandscouts.scoreboard_app.ui.navapp.teams.TeamsScreen
 @Composable
 fun ScorboardNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ScoreboardViewModel
 ) {
     NavHost(
         navController = navController,
@@ -24,13 +25,13 @@ fun ScorboardNavHost(
         composable(
             route = Scoreboard.route,
             ) {
-            ScoreboardScreen(context = LocalContext.current)
+            ScoreboardScreen(viewModel = viewModel, context = LocalContext.current)
         }
         composable(route = Teams.route) {
-            TeamsScreen()
+            TeamsScreen(viewModel = viewModel, context = LocalContext.current)
         }
         composable(route = Activities.route) {
-            ActivitiesScreen()
+            ActivitiesScreen(viewModel = viewModel, context = LocalContext.current)
         }
     }
 }

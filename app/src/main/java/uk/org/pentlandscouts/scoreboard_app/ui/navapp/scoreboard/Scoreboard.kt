@@ -18,11 +18,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,40 +36,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.json.JSONArray
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
-import uk.org.pentlandscouts.scoreboard_app.ui.data
 import uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.ui.scoreBoardList
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 @Composable
-fun ScoreboardScreen(context: Context) {
+fun ScoreboardScreen(viewModel: ScoreboardViewModel, context: Context) {
 
-
-    val scoreBoardViewModel = viewModel<ScoreboardViewModel>()
-    val isLoading by scoreBoardViewModel.isLoading.collectAsStateWithLifecycle()
-
-    val data = scoreBoardViewModel.data
+    val data: JSONArray
+    //val scoreboardViewModel = viewModel<ScoreboardViewModel>()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     //Build UI View of ScoreboardData from the API
-    scoreBoardList = ArrayList()
+    when(isLoading)
+    {
+        ScoreboardViewModel.State.Loading ->  CircularProgressIndicator() // Show loading
+        else -> {
+            scoreBoardList = ArrayList()
+            data = viewModel.scoreboardData
+            for (i in 0 until data.length()) {
+                val row = data.getJSONObject(i)
+                scoreBoardList = scoreBoardList +
+                        ScoreItem(
+                            row.get("teamName").toString(),
+                            row.get("numActivities").toString().toInt(),
+                            row.get("score").toString().toInt(),
+                            row.get("teamLogo").toString()
+                        )
+            }
 
-    for (i in 0 until data.length()) {
-        val row = data.getJSONObject(i)
-        scoreBoardList = scoreBoardList +
-                ScoreItem(
-                    row.get("teamName").toString(),
-                    row.get("numActivities").toString().toInt(),
-                    row.get("score").toString().toInt(),
-                    row.get("teamLogo").toString()
-                )
+        }
     }
+
+
 
     Spacer(modifier = Modifier.height(9.dp))
 
-
     Row(
         Modifier
-            //.fillMaxWidth()
             .padding(5.dp)
             .background(Color.White)
             .fillMaxWidth(),
@@ -76,6 +85,7 @@ fun ScoreboardScreen(context: Context) {
         Icon(Icons.Default.AccountCircle, contentDescription = "Add Score")
         Text(text = "Score Board", fontWeight = FontWeight.Bold, color = Color.Black)
     }
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
@@ -98,6 +108,36 @@ fun ScoreboardScreen(context: Context) {
                 modifier = Modifier.padding(8.dp),
             ) {
                 // on below line we are creating a column on below sides.
+                Row(
+                    modifier = Modifier.background(Color.White)
+                )
+                {
+                    Spacer(modifier = Modifier.width(35.dp))
+                    Text(
+                        text = "Logo",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(45.dp))
+                    Text(
+                        text = "Team",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(40.dp))
+                    Text(
+                        text = "Score",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(45.dp))
+                    Text(
+                        text = "Add",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(650.dp))
+                }
                 Row(
                     Modifier
                         .fillMaxSize()
@@ -123,13 +163,11 @@ fun ScoreboardScreen(context: Context) {
                         modifier = Modifier
                             .height(60.dp)
                             .width(60.dp)
-                            .padding(5.dp)
+                            .padding(2.dp)
                     )
-                    Spacer(modifier = Modifier.height(9.dp))
 
                     Text(
                         text = scoreBoardList[it].teamName,
-                        //scoreBoardList[it].teamName,
                         modifier = Modifier.padding(4.dp),
                         color = Color.DarkGray
                     )
@@ -141,7 +179,7 @@ fun ScoreboardScreen(context: Context) {
                         color = Color.DarkGray
                     )
 
-
+                    Spacer(modifier = Modifier.width(10.dp))
 
                     OutlinedButton(
                         onClick = {

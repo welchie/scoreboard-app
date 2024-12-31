@@ -32,12 +32,16 @@ import uk.org.pentlandscouts.scoreboard_app.ui.navapp.topbar.TopBarScreen
 class ScoreboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Load data in the background
+        //Run Sync task here to load the data
+        //new LoadDataTask().execute();
 
         setContent {
             ScoreboardApp()
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +54,8 @@ fun ScoreboardApp()
         val currentScreen =
             scoreboardTabRowScreens.find { it.route == currentDestination?.route } ?: Scoreboard
         var refresh = 0
+        val scoreboardViewModel = viewModel<ScoreboardViewModel>()
+
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -79,7 +85,9 @@ fun ScoreboardApp()
         ) { innerPadding ->
                 ScorboardNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                    viewModel = scoreboardViewModel
+
             )
         }
     }

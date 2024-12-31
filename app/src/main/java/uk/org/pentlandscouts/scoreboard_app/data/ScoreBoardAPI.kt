@@ -44,7 +44,8 @@ class ScoreBoardAPI {
 
         fun getActivities() : JSONArray
         {
-            return getAPIData(ACTIVITIES_API_URL)
+            var activities:JSONArray = getAPIData(ACTIVITIES_API_URL)
+            return activities
         }
 
         fun getAPIData(url: String): JSONArray {
