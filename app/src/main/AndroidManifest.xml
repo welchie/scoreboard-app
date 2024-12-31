@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name="uk.org.pentlandscouts.scoreboard_app.ui.ScoreBoardActivity"
+            android:name="uk.org.pentlandscouts.scoreboard_app.ui.navapp.ScoreboardActivity"
             android:exported="true"
             android:label="ScoreBoardActivity"
             android:theme="@style/Theme.ScoreboardApp">

@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -51,17 +50,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
-import uk.org.pentlandscouts.scoreboard_app.theme.ScoreboardAppTheme
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
-import uk.org.pentlandscouts.scoreboard_app.scratch.HomeScreenBottomNavigationBar
-import uk.org.pentlandscouts.scoreboard_app.scratch.Route
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
 import uk.org.pentlandscouts.scoreboard_app.theme.Purple40
+import uk.org.pentlandscouts.scoreboard_app.theme.ScoreboardAppTheme
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 
@@ -69,7 +67,7 @@ var data : JSONArray = JSONArray()
 var scoreBoardList: List<ScoreItem> = ArrayList()
 var selectedContent: String = "ScoreBoard"
 
-class ScoreBoardActivity : ComponentActivity() {
+class ScoreBoardActivityOld : ComponentActivity() {
 
 
     override fun onStart() {
@@ -95,6 +93,7 @@ class ScoreBoardActivity : ComponentActivity() {
                 color = MaterialTheme.colorScheme.background
             )
             {
+                val navController = rememberNavController()
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -115,10 +114,7 @@ class ScoreBoardActivity : ComponentActivity() {
                     contentColor = MaterialTheme.colorScheme.primary ,
                 ) {
 
-                    var currentScreen by remember { mutableStateOf(Route.TeamsDropDown.route) }
-                    //NavBottomBar.BottomBarNav2()
-                    HomeScreenBottomNavigationBar { route ->
-                        currentScreen = route }
+                    NavBottomBar.BottomBarNavTest(navController)
                 }
             },
 
@@ -129,10 +125,10 @@ class ScoreBoardActivity : ComponentActivity() {
                                 "Refreshing...",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            ScoreBoardActivity.setContent("ScoreBoard")
+                            ScoreBoardActivityOld.setContent("ScoreBoard")
                             val i = Intent(
-                                this@ScoreBoardActivity,
-                                ScoreBoardActivity::class.java
+                                this@ScoreBoardActivityOld,
+                                ScoreBoardActivityOld::class.java
                             )
                             finish()
                             startActivity(i)
@@ -187,6 +183,29 @@ suspend fun getScoreBoardData() :JSONArray{
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScoreBoardView(context: Context) {
+    /**
+     * Navigate to Add Score Code
+     */
+//    val navController = rememberNavController()
+//    NavHost(navController, startDestination = Profile(name = "John Smith")) {
+//        composable<Profile> { backStackEntry ->
+//            val profile: Profile = backStackEntry.toRoute()
+//            ProfileScreen(
+//                profile = profile,
+//                onNavigateToFriendsList = {
+//                    navController.navigate(route = FriendsList)
+//                }
+//            )
+//        }
+
+        /**
+     * END Navigate
+     */
+
+    /**
+     * END Navigate
+     */
+
     //Build UI View of ScoreboardData from the API
     scoreBoardList = ArrayList()
 
@@ -276,10 +295,17 @@ fun ScoreBoardView(context: Context) {
                         color = Color.DarkGray
                     )
 
+
+
                     OutlinedButton(
-                            onClick = {  Toast.makeText(
+                            onClick = {
+//                                navController.navigate(route = ScoreBoardNav.AddScore)
+//                            }
+
+
+                                Toast.makeText(
                                         context,
-                                        "Navigate to Add Score",
+                                        "Navigate to Add Score for Team: " + scoreBoardList[it].teamName.toString() ,
                                         Toast.LENGTH_SHORT
                                     ).show()
                             },

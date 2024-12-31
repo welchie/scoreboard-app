@@ -39,6 +39,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -78,6 +80,7 @@ class AddScoreActivity : ComponentActivity() {
             )
             {
                 var presses by remember { mutableIntStateOf(0) }
+                val navController = rememberNavController()
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -95,7 +98,7 @@ class AddScoreActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.primary ,
                 ) {
-                    NavBottomBar.BottomBarNav()
+                    NavBottomBar.BottomBarNavTest(navController)
                 }
             },
 
