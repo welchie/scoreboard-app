@@ -3,6 +3,7 @@ package uk.org.pentlandscouts.scoreboard_app.ui.activities
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -64,7 +65,7 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1),
                 modifier = Modifier
-                    .padding(5.dp)
+                    .padding(0.dp)
                     .background(Color.White)
             ) {
 
@@ -82,11 +83,13 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
                             ).show()
                         },
                         // on below line we are adding padding from our all sides.
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(8.dp).border(width = 1.dp, color = Color.LightGray),
                     ) {
 
                         Row(
                             modifier = Modifier.background(Color.White)
+                                .padding(0.dp)
+                                .border(width = 1.dp, color = Color.LightGray)
                         )
                         {
                             Spacer(modifier = Modifier.width(10.dp))
@@ -120,8 +123,9 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)
                         Row(
                             Modifier
                                 .fillMaxSize()
-                                .padding(5.dp)
+                                .padding(0.dp)
                                 .background(Color.White),
+
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceEvenly,
                         )

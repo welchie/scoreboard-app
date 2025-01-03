@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -70,7 +71,8 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
                 Modifier
                     .padding(5.dp)
                     .background(Color.White)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                   ,
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.Start,
             )
@@ -93,6 +95,7 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
                 modifier = Modifier
                     .padding(5.dp)
                     .background(Color.White)
+
             ) {
                 // Display Scoreboard Items
                 items(teamsList.size) {
@@ -113,6 +116,8 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
                         // on below line we are creating a column on below sides.
                         Row(
                             modifier = Modifier.background(Color.White)
+                                .padding(0.dp)
+                                .border(width = 1.dp, color = Color.LightGray)
                         )
                         {
                             Spacer(modifier = Modifier.width(35.dp))

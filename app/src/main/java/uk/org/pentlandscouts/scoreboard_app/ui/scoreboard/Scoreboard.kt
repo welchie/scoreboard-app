@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -135,7 +136,7 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
                             ).show()
                         },
                         // on below line we are adding padding from our all sides.
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(8.dp).border(width = 1.dp, color = Color.LightGray),
                     ) {
                         // on below line we are creating a column on below sides.
                         Row(
@@ -171,13 +172,15 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
                         Row(
                             Modifier
                                 .fillMaxSize()
-                                .padding(5.dp)
-                                .background(Color.White),
+                                .padding(1.dp)
+                                .background(Color.White)
+                                .border(width=1.dp,color = Color.LightGray),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceEvenly,
                         )
                         {
                             // on below line we are creating image for our grid view item.
+
 
                             Image(
                                 // on below line we are specifying the drawable image for our image.
