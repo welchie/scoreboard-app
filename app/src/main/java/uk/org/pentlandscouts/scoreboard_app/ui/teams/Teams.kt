@@ -69,7 +69,7 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
 
             Row(
                 Modifier
-                    .padding(5.dp)
+                    .padding(0.dp)
                     .background(Color.White)
                     .fillMaxWidth()
                    ,
@@ -93,7 +93,7 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1),
                 modifier = Modifier
-                    .padding(5.dp)
+                    .padding(0.dp)
                     .background(Color.White)
 
             ) {
@@ -150,8 +150,9 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
                         Row(
                             Modifier
                                 .fillMaxSize()
-                                .padding(5.dp)
-                                .background(Color.White),
+                                .background(Color.White)
+                                .padding(1.dp)
+                                .border(width = 1.dp, color = Color.LightGray),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceEvenly,
                         )

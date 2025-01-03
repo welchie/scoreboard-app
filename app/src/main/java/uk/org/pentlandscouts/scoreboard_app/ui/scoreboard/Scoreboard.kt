@@ -172,7 +172,7 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
                         Row(
                             Modifier
                                 .fillMaxSize()
-                                .padding(1.dp)
+                                .padding(0.dp)
                                 .background(Color.White)
                                 .border(width=1.dp,color = Color.LightGray),
                             verticalAlignment = Alignment.CenterVertically,
