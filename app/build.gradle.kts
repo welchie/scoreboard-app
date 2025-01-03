@@ -1,5 +1,3 @@
-//import org.jetbrains.kotlin.psi.stubs.impl.serialize
-
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -42,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.11"
@@ -75,7 +74,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
     // https://mvnrepository.com/artifact/androidx.compose.foundation/foundation
     runtimeOnly(libs.androidx.foundation)
 
@@ -93,8 +91,6 @@ dependencies {
     runtimeOnly(libs.androidx.material.icons.extended.v173)
     // https://mvnrepository.com/artifact/androidx.compose.material/material-icons-core
     runtimeOnly(libs.androidx.material.icons.core)
-
-
 
     implementation(libs.material3)
     implementation(libs.androidx.material3.adaptive.navigation.suite)

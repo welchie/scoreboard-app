@@ -5,5 +5,5 @@ data class ActivityItem(
     val description: String,
     val maxScore: Int,
     val zone: String,
-    val ID: Int
+    val id: Int
 )

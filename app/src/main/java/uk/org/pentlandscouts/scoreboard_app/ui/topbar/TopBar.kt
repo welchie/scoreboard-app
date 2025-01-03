@@ -20,7 +20,7 @@ import com.example.scoreboard_app.R
 
 @Composable
 fun TopBarScreen() {
-    val title:String = "Scoreboard App"
+    val title= "Scoreboard App"
     Row {
 
         Image(

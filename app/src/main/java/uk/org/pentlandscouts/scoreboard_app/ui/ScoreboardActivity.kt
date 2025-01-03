@@ -44,7 +44,6 @@ fun ScoreboardApp()
         val currentDestination = currentBackStack?.destination
         val currentScreen =
             scoreboardTabRowScreens.find { it.route == currentDestination?.route } ?: Scoreboard
-        var refresh = 0
         val scoreboardViewModel = viewModel<ScoreboardViewModel>()
 
         Scaffold(
@@ -74,7 +73,7 @@ fun ScoreboardApp()
             }
 
         ) { innerPadding ->
-                ScorboardNavHost(
+                ScoreboardNavHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
                     viewModel = scoreboardViewModel

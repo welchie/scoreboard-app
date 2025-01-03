@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.json.JSONArray
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getActivitiesData
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getTeamsData
@@ -17,7 +18,7 @@ class ScoreboardViewModel : ViewModel(), LifecycleObserver
 {
 
     sealed class State {
-        object Loading: State()
+        data object Loading: State()
         data class Data(val data: String): State()
     }
 
@@ -40,17 +41,10 @@ class ScoreboardViewModel : ViewModel(), LifecycleObserver
             }
         }
     }
-//        .onStart {
-//            scoreboardData = getScoreBoardData()
-//            println("Loading scoreboard data...")
-//            println(scoreboardData)
-//
-//        }
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.WhileSubscribed(5000L),
-//            false
-//        )
 
+    fun addScore(teamID:Int, actId:Int, score:Int): Int
+    {
+        return ScoreBoardAPI.addScore(teamID,actId,score)
+    }
 
 }
