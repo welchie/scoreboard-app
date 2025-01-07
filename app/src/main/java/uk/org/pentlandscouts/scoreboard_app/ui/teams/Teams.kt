@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.json.JSONArray
 import uk.org.pentlandscouts.scoreboard_app.data.TeamItem
-import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
+import uk.org.pentlandscouts.scoreboard_app.view.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 @Composable
@@ -162,9 +162,7 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
                             Image(
                                 // on below line we are specifying the drawable image for our image.
 
-                                //Get the resourceId from MipMap
-                                //var resID = ResourceUtils.getResourceIdFromMipMap(scoreBoardList[it].teamName)
-                                painter = painterResource(
+                               painter = painterResource(
                                     id = ResourceUtils.getResourceIdFromMipMap(
                                         teamsList[it].logo
                                     )
@@ -179,7 +177,6 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
 
                             Text(
                                 text = teamsList[it].teamName,
-                                //scoreBoardList[it].teamName,
                                 modifier = Modifier.padding(4.dp),
                                 color = Color.DarkGray
                             )
@@ -190,8 +187,6 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context)
                                 text = teamsList[it].id.toString(),
                                 color = Color.DarkGray
                             )
-
-
 
                             OutlinedButton(
                                 onClick = {

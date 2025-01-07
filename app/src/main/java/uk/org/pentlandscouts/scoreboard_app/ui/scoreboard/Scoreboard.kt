@@ -37,16 +37,15 @@ import org.json.JSONArray
 import uk.org.pentlandscouts.scoreboard_app.data.ActivityItem
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
 import uk.org.pentlandscouts.scoreboard_app.data.TeamItem
-import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
+import uk.org.pentlandscouts.scoreboard_app.view.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 @Composable
 fun ScoreboardScreen(viewModel: ScoreboardViewModel,
                      context: Context,
-                     onAddScore: (String, String) -> Unit = { _: String, _: String ->  }
+                     onAddScore: () -> Unit = { }
                     ) {
 
-    val teamData: JSONArray
     val activitiesData: JSONArray
     var scoreBoardList: List<ScoreItem>
     scoreBoardList = ArrayList()
@@ -63,10 +62,9 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
     when(isLoading) {
         ScoreboardViewModel.State.Loading -> CircularProgressIndicator() // Show loading
         else -> {
-            // scoreBoardList = ArrayList()
-            teamData = viewModel.scoreboardData
-            for (i in 0 until teamData.length()) {
-                val row = teamData.getJSONObject(i)
+             scoreBoardList = ArrayList()
+            for (i in 0 until viewModel.scoreboardData.length()) {
+                val row = viewModel.scoreboardData.getJSONObject(i)
                 scoreBoardList = scoreBoardList +
                         ScoreItem(
                             row.get("teamName").toString(),
@@ -75,7 +73,6 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
                             row.get("teamLogo").toString()
                         )
             }
-
             //Get The Teams List
             teams =  viewModel.teamsData
             for (i in 0 until teams.length()) {
@@ -87,9 +84,7 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
                             row.get("logo").toString()
                         )
             }
-
             //Get Activities list here = passed to the Dropdown list
-            //activitiesList = ArrayList()
             activitiesData = viewModel.activities
             for (i in 0 until activitiesData.length()) {
                 val row = activitiesData.getJSONObject(i)
@@ -184,9 +179,6 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
 
                             Image(
                                 // on below line we are specifying the drawable image for our image.
-
-                                //Get the resourceId from MipMap
-                                //var resID = ResourceUtils.getResourceIdFromMipMap(scoreBoardList[it].teamName)
                                 painter = painterResource(
                                     id = ResourceUtils.getResourceIdFromMipMap(
                                         scoreBoardList[it].teamImg
@@ -217,13 +209,19 @@ fun ScoreboardScreen(viewModel: ScoreboardViewModel,
                             OutlinedButton(
 
                                 onClick = {
-                                    //Look Up Team ID form Team Name
-                                    val teamName = scoreBoardList[it].teamName
-                                    val item: List<TeamItem> =
-                                        teamsList.filter { it.teamName == teamName }
+
+                                   //Look Up Team ID form Team Name
+                                    viewModel.selectedTeamName = scoreBoardList[it].teamName
+                                    var item: List<TeamItem> =
+                                        teamsList.filter { it.teamName ==  viewModel.selectedTeamName }
                                     if (item.size == 1) {
-                                        val teamID = item[0].id
-                                        onAddScore(teamName,teamID.toString())
+                                        viewModel.selectedTeamID = item[0].id
+                                        Toast.makeText(
+                                            context,
+                                            "Add $ viewModel.selectedTeamName " + viewModel.selectedTeamID + " scores..",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        onAddScore()
                                     }
                                 },
 

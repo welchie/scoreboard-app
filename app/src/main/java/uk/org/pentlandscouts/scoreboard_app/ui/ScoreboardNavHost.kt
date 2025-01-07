@@ -11,6 +11,7 @@ import uk.org.pentlandscouts.scoreboard_app.ui.activities.ActivitiesScreen
 import uk.org.pentlandscouts.scoreboard_app.ui.scoreboard.AddScoreScreen
 import uk.org.pentlandscouts.scoreboard_app.ui.scoreboard.ScoreboardScreen
 import uk.org.pentlandscouts.scoreboard_app.ui.teams.TeamsScreen
+import uk.org.pentlandscouts.scoreboard_app.view.ScoreboardViewModel
 
 @Composable
 fun ScoreboardNavHost(
@@ -28,8 +29,8 @@ fun ScoreboardNavHost(
             ) {
             ScoreboardScreen(viewModel = viewModel,
                         context = LocalContext.current,
-            onAddScore = { s: String, i: String ->
-                navController.navigateToAddAScore(teamName = s,teamID= i)
+            onAddScore = {
+                navController.navigate(AddScore.route)
             },)
 
         }
@@ -40,26 +41,18 @@ fun ScoreboardNavHost(
             ActivitiesScreen(viewModel = viewModel, context = LocalContext.current)
         }
         composable(
-            route=AddScore.routeWithArgs,
-            arguments = AddScore.arguments
-        ) { navBackStackEntry ->
-            val teamName =
-                navBackStackEntry.arguments?.getString(AddScore.TEAMNAMEARG)
-
-            val teamID =
-                navBackStackEntry.arguments?.getString(AddScore.TEAMIDARG)
-
-            if (teamID != null) {
-                AddScoreScreen(viewModel, context = LocalContext.current, teamName = teamName, teamID = teamID.toInt(),
+            route=AddScore.route,
+            //arguments = AddScore.arguments
+        ) {
+                AddScoreScreen(viewModel,
+                    context = LocalContext.current,
                     onScoreBoard = {
-                        navController.navigateSingleTopTo(Scoreboard.route)
+                       navController.navigate(Scoreboard.route)
                     }
                 )
-            }
         }
     }
 }
-
 fun NavHostController.navigateSingleTopTo(route: String) =
     this.navigate(route) {
         // Pop up to the start destination of the graph to
@@ -76,6 +69,3 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         // Restore state when reselecting a previously selected item
         restoreState = true
     }
-private fun NavHostController.navigateToAddAScore(teamName: String, teamID: String) {
-    this.navigateSingleTopTo("${AddScore.route}/$teamName/$teamID")
-}

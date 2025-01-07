@@ -34,7 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.json.JSONArray
 import uk.org.pentlandscouts.scoreboard_app.data.ActivityItem
-import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
+import uk.org.pentlandscouts.scoreboard_app.view.ScoreboardViewModel
 
 @Composable
 fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context)

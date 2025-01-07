@@ -19,13 +19,11 @@ import uk.org.pentlandscouts.scoreboard_app.theme.Purple40
 import uk.org.pentlandscouts.scoreboard_app.theme.ScoreboardAppTheme
 import uk.org.pentlandscouts.scoreboard_app.ui.components.ScoreboardTabRow
 import uk.org.pentlandscouts.scoreboard_app.ui.topbar.TopBarScreen
+import uk.org.pentlandscouts.scoreboard_app.view.ScoreboardViewModel
 
 class ScoreboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Load data in the background
-        //Run Sync task here to load the data
-        //new LoadDataTask().execute();
 
         setContent {
             ScoreboardApp()

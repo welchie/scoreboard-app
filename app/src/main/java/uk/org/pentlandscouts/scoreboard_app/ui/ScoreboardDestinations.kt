@@ -34,13 +34,6 @@ object AddScore: ScoreboardDestination
 {
     override val icon = Icons.Default.Add
     override val route = "addScore"
-    const val TEAMNAMEARG = "teamName"
-    const val TEAMIDARG = "teamID"
-    val routeWithArgs = "${route}/{${TEAMNAMEARG}}/{${TEAMIDARG}}"
-    val arguments = listOf(
-        navArgument(TEAMNAMEARG) { type = NavType.StringType },
-        navArgument(TEAMIDARG) { type = NavType.StringType }
-    )
 }
 
 // Screens to be displayed in the top ScoreboardTabRow

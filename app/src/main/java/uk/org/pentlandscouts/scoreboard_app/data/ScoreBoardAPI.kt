@@ -17,7 +17,7 @@ class ScoreBoardAPI {
         private const val ADD_SCORE:String = "$BASE_URL/scoreboard/add"
 
         suspend fun getScoreBoardData(): JSONArray {
-            return withContext(Dispatchers.IO) { getScoreBoardDataList() }
+            return withContext(Dispatchers.IO) { getScoreBoard() }
         }
 
         private fun getScoreBoardDataList(): JSONArray {
@@ -48,7 +48,7 @@ class ScoreBoardAPI {
             return activities
         }
 
-        private fun getAPIData(url: String): JSONArray {
+        fun getAPIData(url: String): JSONArray {
             val response: Response =
                 khttp.get(url)
             val statusCode = response.statusCode
@@ -57,7 +57,7 @@ class ScoreBoardAPI {
             return data
         }
 
-        private fun update(url: String): Int {
+        fun update(url: String): Int {
 
             val policy = ThreadPolicy.Builder().permitAll().build()
             StrictMode.setThreadPolicy(policy)

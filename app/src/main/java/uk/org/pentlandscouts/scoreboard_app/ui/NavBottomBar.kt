@@ -22,8 +22,6 @@ class NavBottomBar {
 
         @Composable
         fun BottomBarNavTest(navController: NavController) {
-
-
             val selectedIndex = remember { mutableIntStateOf(0) }
             Box {
                 BottomNavigation(elevation = 10.dp) {
@@ -52,11 +50,8 @@ class NavBottomBar {
                         onClick = {
                             selectedIndex.intValue = 2
 
-
                             navController.navigate(
                                 route = "AddScoreView"
-
-                               // Score(teamName = "Activities")
                             )
                             {
                                 popUpTo(navController.graph.findStartDestination().id) {

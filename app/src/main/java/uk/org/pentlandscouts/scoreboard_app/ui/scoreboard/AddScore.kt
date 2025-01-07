@@ -32,19 +32,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONArray
 import uk.org.pentlandscouts.scoreboard_app.data.ActivityItem
-import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
+import uk.org.pentlandscouts.scoreboard_app.view.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.ui.activities.ActivitiesDropDown
+import uk.org.pentlandscouts.scoreboard_app.view.ScoreboardViewModel.State
 
 @Composable
 fun AddScoreScreen(
     viewModel: ScoreboardViewModel,
     context:Context,
-    teamName: String?,
-    teamID: Int,
     onScoreBoard: () -> Unit = {},
 ) {
+
     var score by remember { mutableStateOf("")}
     val activitiesData: JSONArray
     var activitiesList: List<ActivityItem>
@@ -56,10 +58,8 @@ fun AddScoreScreen(
     when(isLoading) {
         ScoreboardViewModel.State.Loading -> CircularProgressIndicator() // Show loading
         else -> {
-
-
             //Get Activities list here = passed to the Dropdown list
-            //activitiesList = ArrayList()
+            activitiesList = ArrayList()
             activitiesData = viewModel.activities
             for (i in 0 until activitiesData.length()) {
                 val row = activitiesData.getJSONObject(i)
@@ -72,7 +72,6 @@ fun AddScoreScreen(
                             row.get("id").toString().toInt()
                         )
             }
-
 
             Row(
                 verticalAlignment = Alignment.Top,
@@ -89,26 +88,22 @@ fun AddScoreScreen(
                 {
 
                     Icon(Icons.Default.Add, contentDescription = "Add Score")
-                    Text(text = "Team Name:$teamName")
+                    Text(text = "Team Name:${viewModel.selectedTeamName}")
 
-                    viewModel.activities
                     ActivitiesDropDown(
                         activitiesList = activitiesList,
                         onItemClick = { selectedIndex = it })
 
                     if (activitiesList.filter{ it.id == selectedIndex}.size ==1) {
-                        //val filteredList: List<ActivityItem> = activitiesList.filter{ it.ID == selectedIndex}
                         val item: ActivityItem = activitiesList.filter{ it.id == selectedIndex}[0]
-                        //filteredList[0]
-
-                        Text(
-                            text = "You have chosen Activity ID: $selectedIndex ${item.name}",
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(3.dp)
-                                .fillMaxWidth()
-                                .background(Color.LightGray),
-                        )
+//                        Text(
+//                            text = "You have chosen Activity ID: $selectedIndex ${item.name}",
+//                            textAlign = TextAlign.Center,
+//                            modifier = Modifier
+//                                .padding(3.dp)
+//                                .fillMaxWidth()
+//                                .background(Color.LightGray),
+//                        )
                         OutlinedTextField(
                             value = score,
                             onValueChange = { score = it },
@@ -122,15 +117,10 @@ fun AddScoreScreen(
                             // inside on click we are displaying the toast message.
                             Toast.makeText(
                                 context,
-                                "Add Score $teamName $score $selectedIndex $teamID",
+                                "Add Score ${viewModel.selectedTeamName} $score $selectedIndex ${viewModel.selectedTeamID}",
                                 Toast.LENGTH_SHORT
                             ).show()
-
-                            viewModel.addScore(teamID,selectedIndex, score.toInt())
-
-                            //Retrieve the scoreboard again ?
-
-                            //MOve back to the Scoreboard
+                            viewModel.addScore(viewModel.selectedTeamID, selectedIndex, score.toInt())
                             onScoreBoard()
                         },
                         modifier = Modifier.width(115.dp)
