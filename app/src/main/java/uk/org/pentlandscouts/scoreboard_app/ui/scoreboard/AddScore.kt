@@ -1,6 +1,5 @@
 package uk.org.pentlandscouts.scoreboard_app.ui.scoreboard
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -42,11 +42,11 @@ import uk.org.pentlandscouts.scoreboard_app.ui.activities.ActivitiesDropDown
 @Composable
 fun AddScoreScreen(
     viewModel: ScoreboardViewModel,
-    context: Context,
     teamName: String?,
     teamID: Int,
     onScoreBoard: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     var score by rememberSaveable { mutableStateOf("") }
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     var isSubmitting by remember { mutableStateOf(false) }

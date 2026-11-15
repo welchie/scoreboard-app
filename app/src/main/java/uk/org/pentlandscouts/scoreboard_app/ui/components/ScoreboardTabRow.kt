@@ -6,7 +6,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardDestination
-import java.util.Locale
 
 @Composable
 fun ScoreboardTabRow(
@@ -16,20 +15,17 @@ fun ScoreboardTabRow(
 ) {
     NavigationBar {
         allScreens.forEach { screen ->
-            val label = screen.route.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-            }
             NavigationBarItem(
                 selected = currentScreen == screen,
                 onClick = { onTabSelected(screen) },
                 icon = {
                     Icon(
                         imageVector = screen.icon,
-                        contentDescription = label
+                        contentDescription = screen.label
                     )
                 },
                 label = {
-                    Text(text = label)
+                    Text(text = screen.label)
                 }
             )
         }
