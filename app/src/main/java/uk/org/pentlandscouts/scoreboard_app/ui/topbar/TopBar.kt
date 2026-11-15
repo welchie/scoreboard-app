@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.scoreboard_app.R
+import uk.org.pentlandscouts.scoreboard_app.R
 
 @Composable
 fun TopBarScreen() {

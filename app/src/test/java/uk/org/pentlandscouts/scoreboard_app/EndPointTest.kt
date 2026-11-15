@@ -1,15 +1,14 @@
-package com.example.scoreboard_app
+package uk.org.pentlandscouts.scoreboard_app
 
 import org.junit.Assert.assertEquals
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI
 import org.junit.Assert.assertNotNull
 import org.junit.Test
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI
 
 class EndPointTest {
 
     @Test
-    fun getScorebaordTest()
-    {
+    fun getScorebaordTest() {
         val data = ScoreBoardAPI.getScoreBoard()
         println("Number of teams ${data.length()}")
 
@@ -18,12 +17,11 @@ class EndPointTest {
             val row = data.getJSONObject(i)
             println("${row.get("teamName")} \t ${row.get("numActivities")} \t ${row.get("score")}")
         }
-        assertNotNull(data);
+        assertNotNull(data)
     }
 
     @Test
-    fun getTeamsTest()
-    {
+    fun getTeamsTest() {
         val data = ScoreBoardAPI.getTeams()
         println("Number of teams ${data.length()}")
 
@@ -32,12 +30,11 @@ class EndPointTest {
             val row = data.getJSONObject(i)
             println("${row.get("name")} \t ${row.get("logo")} \t ${row.get("id")}")
         }
-        assertNotNull(data);
+        assertNotNull(data)
     }
 
     @Test
-    fun getActivitiesTest()
-    {
+    fun getActivitiesTest() {
         val data = ScoreBoardAPI.getActivities()
         println("Number of Activities ${data.length()}")
 
@@ -46,12 +43,11 @@ class EndPointTest {
             val row = data.getJSONObject(i)
             println("${row.get("name")} \t ${row.get("description")} \t ${row.get("maxScore")} \t ${row.get("zone")} \t ${row.get("id")}")
         }
-        assertNotNull(data);
+        assertNotNull(data)
     }
 
     @Test
-    fun addScoreTest()
-    {
+    fun addScoreTest() {
         val teams = ScoreBoardAPI.getTeams()
         println("Number of teams ${teams.length()}")
 
@@ -70,12 +66,11 @@ class EndPointTest {
             println("${row.get("name")} \t ${row.get("description")} \t ${row.get("maxScore")} \t ${row.get("zone")} \t ${row.get("id")}")
         }
 
-        var teamID:Int = teams.getJSONObject(0).get("id").toString().toInt()
-        var actId = activities.getJSONObject(0).get("id").toString().toInt()
-        var score = 25
+        val teamID: Int = teams.getJSONObject(0).get("id").toString().toInt()
+        val actId = activities.getJSONObject(0).get("id").toString().toInt()
+        val score = 25
 
-        val status = ScoreBoardAPI.addScore(teamID,actId,score)
-        assertEquals(status,200);
+        val status = ScoreBoardAPI.addScore(teamID, actId, score)
+        assertEquals(status, 200)
     }
-
 }
