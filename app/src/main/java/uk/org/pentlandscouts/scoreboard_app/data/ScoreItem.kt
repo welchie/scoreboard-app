@@ -1,14 +1,13 @@
 package uk.org.pentlandscouts.scoreboard_app.data
 
-// on below line we are creating a
-// modal class for our data class.
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ScoreItem(
-
     val teamName: String,
-
     val numActivities: Int,
-
     val score: Int,
-
+    @SerialName("teamLogo")
     val teamImg: String
 )
