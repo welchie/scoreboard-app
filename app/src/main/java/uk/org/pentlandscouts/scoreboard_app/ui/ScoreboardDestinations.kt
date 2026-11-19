@@ -2,47 +2,53 @@ package uk.org.pentlandscouts.scoreboard_app.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
+@Serializable
+data object ScoreboardRoute
+
+@Serializable
+data object TeamsRoute
+
+@Serializable
+data object ActivitiesRoute
+
+@Serializable
+data class AddScoreRoute(
+    val teamName: String,
+    val teamId: Int
+)
 
 interface ScoreboardDestination {
     val icon: ImageVector
-    val route: String
+    val label: String
+    val route: Any
+    val routeClass: KClass<*>
 }
 
 object Scoreboard : ScoreboardDestination {
     override val icon = Icons.Filled.Home
-    override val route = "scoreboard"
+    override val label = "Scoreboard"
+    override val route = ScoreboardRoute
+    override val routeClass = ScoreboardRoute::class
 }
 
 object Teams : ScoreboardDestination {
     override val icon = Icons.Default.Person
-    override val route = "teams"
+    override val label = "Teams"
+    override val route = TeamsRoute
+    override val routeClass = TeamsRoute::class
 }
 
 object Activities : ScoreboardDestination {
     override val icon = Icons.Default.Accessibility
-    override val route = "activities"
+    override val label = "Activities"
+    override val route = ActivitiesRoute
+    override val routeClass = ActivitiesRoute::class
 }
 
-object AddScore: ScoreboardDestination
-{
-    override val icon = Icons.Default.Add
-    override val route = "addScore"
-    const val TEAMNAMEARG = "teamName"
-    const val TEAMIDARG = "teamID"
-    val routeWithArgs = "${route}/{${TEAMNAMEARG}}/{${TEAMIDARG}}"
-    val arguments = listOf(
-        navArgument(TEAMNAMEARG) { type = NavType.StringType },
-        navArgument(TEAMIDARG) { type = NavType.StringType }
-    )
-}
-
-// Screens to be displayed in the top ScoreboardTabRow
 val scoreboardTabRowScreens = listOf(Scoreboard, Teams, Activities)
-
