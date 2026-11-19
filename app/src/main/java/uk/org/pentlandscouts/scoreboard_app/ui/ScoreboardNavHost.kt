@@ -2,11 +2,11 @@ package uk.org.pentlandscouts.scoreboard_app.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import uk.org.pentlandscouts.scoreboard_app.ui.activities.ActivitiesScreen
 import uk.org.pentlandscouts.scoreboard_app.ui.scoreboard.AddScoreScreen
 import uk.org.pentlandscouts.scoreboard_app.ui.scoreboard.ScoreboardScreen
@@ -20,62 +20,46 @@ fun ScoreboardNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Scoreboard.route,
+        startDestination = ScoreboardRoute,
         modifier = modifier
     ) {
-        composable(
-            route = Scoreboard.route,
-            ) {
-            ScoreboardScreen(viewModel = viewModel,
-                        context = LocalContext.current,
-            onAddScore = { s: String, i: String ->
-                navController.navigateToAddAScore(teamName = s,teamID= i)
-            },)
-
+        composable<ScoreboardRoute> {
+            ScoreboardScreen(
+                viewModel = viewModel,
+                onAddScore = { teamName, teamId ->
+                    navController.navigateSingleTopTo(
+                        AddScoreRoute(teamName = teamName, teamId = teamId)
+                    )
+                }
+            )
         }
-        composable(route = Teams.route) {
-            TeamsScreen(viewModel = viewModel, context = LocalContext.current)
+        composable<TeamsRoute> {
+            TeamsScreen(viewModel = viewModel)
         }
-        composable(route = Activities.route) {
-            ActivitiesScreen(viewModel = viewModel, context = LocalContext.current)
+        composable<ActivitiesRoute> {
+            ActivitiesScreen(viewModel = viewModel)
         }
-        composable(
-            route=AddScore.routeWithArgs,
-            arguments = AddScore.arguments
-        ) { navBackStackEntry ->
-            val teamName =
-                navBackStackEntry.arguments?.getString(AddScore.TEAMNAMEARG)
-
-            val teamID =
-                navBackStackEntry.arguments?.getString(AddScore.TEAMIDARG)
-
-            if (teamID != null) {
-                AddScoreScreen(viewModel, context = LocalContext.current, teamName = teamName, teamID = teamID.toInt(),
-                    onScoreBoard = {
-                        navController.navigateSingleTopTo(Scoreboard.route)
-                    }
-                )
-            }
+        composable<AddScoreRoute> { navBackStackEntry ->
+            val args = navBackStackEntry.toRoute<AddScoreRoute>()
+            AddScoreScreen(
+                viewModel = viewModel,
+                teamName = args.teamName,
+                teamID = args.teamId,
+                onScoreBoard = {
+                    navController.navigateSingleTopTo(ScoreboardRoute)
+                }
+            )
         }
     }
 }
 
-fun NavHostController.navigateSingleTopTo(route: String) =
+fun NavHostController.navigateSingleTopTo(route: Any) =
     this.navigate(route) {
-        // Pop up to the start destination of the graph to
-        // avoid building up a large stack of destinations
-        // on the back stack as users select items
         popUpTo(
             this@navigateSingleTopTo.graph.findStartDestination().id
         ) {
             saveState = true
         }
-        // Avoid multiple copies of the same destination when
-        // reselecting the same item
         launchSingleTop = true
-        // Restore state when reselecting a previously selected item
         restoreState = true
     }
-private fun NavHostController.navigateToAddAScore(teamName: String, teamID: String) {
-    this.navigateSingleTopTo("${AddScore.route}/$teamName/$teamID")
-}
