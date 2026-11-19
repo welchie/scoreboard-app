@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import uk.org.pentlandscouts.scoreboard_app.theme.Purple40
@@ -23,27 +24,22 @@ import uk.org.pentlandscouts.scoreboard_app.ui.topbar.TopBarScreen
 class ScoreboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Load data in the background
-        //Run Sync task here to load the data
-        //new LoadDataTask().execute();
-
         setContent {
             ScoreboardApp()
         }
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScoreboardApp()
-{
-    ScoreboardAppTheme  {
+fun ScoreboardApp() {
+    ScoreboardAppTheme {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
-        val currentScreen =
-            scoreboardTabRowScreens.find { it.route == currentDestination?.route } ?: Scoreboard
+        val currentScreen = scoreboardTabRowScreens.find { screen ->
+            currentDestination?.hasRoute(screen.routeClass) == true
+        } ?: Scoreboard
         val scoreboardViewModel = viewModel<ScoreboardViewModel>()
 
         Scaffold(
@@ -51,15 +47,12 @@ fun ScoreboardApp()
                 TopAppBar(
                     colors = topAppBarColors(
                         containerColor = Purple40,
-
-                        //MaterialTheme.colorScheme.,
-                        titleContentColor =  MaterialTheme.colorScheme.primary ,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
                     title = {
                         TopBarScreen()
                     }
                 )
-
             },
             bottomBar = {
                 ScoreboardTabRow(
@@ -69,15 +62,12 @@ fun ScoreboardApp()
                     },
                     currentScreen = currentScreen
                 )
-
             }
-
         ) { innerPadding ->
-                ScoreboardNavHost(
+            ScoreboardNavHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
-                    viewModel = scoreboardViewModel
-
+                viewModel = scoreboardViewModel
             )
         }
     }

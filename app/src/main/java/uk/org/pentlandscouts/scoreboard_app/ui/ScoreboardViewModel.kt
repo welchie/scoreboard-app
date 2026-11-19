@@ -1,50 +1,95 @@
 package uk.org.pentlandscouts.scoreboard_app.ui
 
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.json.JSONArray
+import uk.org.pentlandscouts.scoreboard_app.data.ActivityItem
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getActivitiesData
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getScoreBoardData
-import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI.Companion.getTeamsData
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardDataSource
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
+import uk.org.pentlandscouts.scoreboard_app.data.TeamItem
 
-class ScoreboardViewModel : ViewModel(), LifecycleObserver
-{
+class ScoreboardViewModel(
+    private val dataSource: ScoreBoardDataSource = ScoreBoardAPI,
+    private val pollIntervalMs: Long = 60_000L,
+    startPolling: Boolean = true
+) : ViewModel() {
 
-    sealed class State {
-        data object Loading: State()
-        data class Data(val data: String): State()
+    sealed interface UiState {
+        data object Loading : UiState
+        data class Success(
+            val scoreboard: List<ScoreItem>,
+            val teams: List<TeamItem>,
+            val activities: List<ActivityItem>
+        ) : UiState
+        data class Error(val message: String) : UiState
     }
 
-    var scoreboardData:JSONArray = JSONArray()
-    var teamsData:JSONArray = JSONArray()
-    var activities:JSONArray = JSONArray()
-    private var _isLoading = MutableStateFlow<State>(State.Loading)
-    val isLoading = _isLoading.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            while (isActive) {
-                scoreboardData = getScoreBoardData()
-                teamsData = getTeamsData()
-                activities = getActivitiesData()
-
-                _isLoading.value = State.Data("True")
-                // wait one minute and repeat your request
-                delay(60 * 1000L)
+        if (startPolling) {
+            viewModelScope.launch {
+                while (isActive) {
+                    refreshData()
+                    delay(pollIntervalMs)
+                }
             }
         }
     }
 
-    fun addScore(teamID:Int, actId:Int, score:Int): Int
-    {
-        return ScoreBoardAPI.addScore(teamID,actId,score)
+    suspend fun refreshData() {
+        runCatching {
+            coroutineScope {
+                val scoreboardDeferred = async { dataSource.getScoreBoardData() }
+                val teamsDeferred = async { dataSource.getTeamsData() }
+                val activitiesDeferred = async { dataSource.getActivitiesData() }
+
+                UiState.Success(
+                    scoreboard = scoreboardDeferred.await(),
+                    teams = teamsDeferred.await(),
+                    activities = activitiesDeferred.await()
+                )
+            }
+        }.onSuccess { state ->
+            _uiState.value = state
+        }.onFailure { error ->
+            if (_uiState.value !is UiState.Success) {
+                _uiState.value = UiState.Error(error.message ?: "Failed to load scoreboard data")
+            }
+        }
     }
 
+    fun refresh() {
+        viewModelScope.launch {
+            refreshData()
+        }
+    }
+
+    fun addScore(
+        teamID: Int,
+        actId: Int,
+        score: Int,
+        onResult: (Boolean) -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            val succeeded = runCatching {
+                val status = dataSource.addScore(teamID, actId, score)
+                status in 200..299
+            }.getOrDefault(false)
+
+            if (succeeded) {
+                refreshData()
+            }
+            onResult(succeeded)
+        }
+    }
 }

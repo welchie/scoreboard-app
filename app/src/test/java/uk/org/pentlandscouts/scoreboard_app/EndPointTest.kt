@@ -1,76 +1,118 @@
 package uk.org.pentlandscouts.scoreboard_app
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
+import uk.org.pentlandscouts.scoreboard_app.data.ActivityItem
 import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardAPI
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreBoardDataSource
+import uk.org.pentlandscouts.scoreboard_app.data.ScoreItem
+import uk.org.pentlandscouts.scoreboard_app.data.TeamItem
+import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class EndPointTest {
 
-    @Test
-    fun getScorebaordTest() {
-        val data = ScoreBoardAPI.getScoreBoard()
-        println("Number of teams ${data.length()}")
+    private val testDispatcher = StandardTestDispatcher()
 
-        println("Team Name \t No. Activities \t Score")
-        for (i in 0 until data.length()) {
-            val row = data.getJSONObject(i)
-            println("${row.get("teamName")} \t ${row.get("numActivities")} \t ${row.get("score")}")
-        }
-        assertNotNull(data)
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
-    fun getTeamsTest() {
-        val data = ScoreBoardAPI.getTeams()
-        println("Number of teams ${data.length()}")
+    fun parseScoreboardJsonTest() {
+        val json = """
+            [
+                {"teamName": "Lions", "numActivities": 3, "score": 75, "teamLogo": "lion_foreground"},
+                {"teamName": "Owls", "numActivities": 2, "score": 50, "teamLogo": "owl_foreground"}
+            ]
+        """.trimIndent()
 
-        println("Team Name \t Logo \t Id")
-        for (i in 0 until data.length()) {
-            val row = data.getJSONObject(i)
-            println("${row.get("name")} \t ${row.get("logo")} \t ${row.get("id")}")
-        }
-        assertNotNull(data)
+        val result = ScoreBoardAPI.parseScoreBoardJson(json)
+        assertEquals(2, result.size)
+        assertEquals(ScoreItem("Lions", 3, 75, "lion_foreground"), result[0])
+        assertEquals(ScoreItem("Owls", 2, 50, "owl_foreground"), result[1])
     }
 
     @Test
-    fun getActivitiesTest() {
-        val data = ScoreBoardAPI.getActivities()
-        println("Number of Activities ${data.length()}")
+    fun parseTeamsJsonTest() {
+        val json = """
+            [
+                {"name": "Lions", "id": 1, "logo": "lion_foreground"},
+                {"name": "Sharks", "id": 2, "logo": "shark_foreground"}
+            ]
+        """.trimIndent()
 
-        println("Activity Name \t Description \t Max Score \t Zone \t Id")
-        for (i in 0 until data.length()) {
-            val row = data.getJSONObject(i)
-            println("${row.get("name")} \t ${row.get("description")} \t ${row.get("maxScore")} \t ${row.get("zone")} \t ${row.get("id")}")
-        }
-        assertNotNull(data)
+        val result = ScoreBoardAPI.parseTeamsJson(json)
+        assertEquals(2, result.size)
+        assertEquals(TeamItem("Lions", 1, "lion_foreground"), result[0])
+        assertEquals(TeamItem("Sharks", 2, "shark_foreground"), result[1])
     }
 
     @Test
-    fun addScoreTest() {
-        val teams = ScoreBoardAPI.getTeams()
-        println("Number of teams ${teams.length()}")
+    fun parseActivitiesJsonTest() {
+        val json = """
+            [
+                {"name": "Archery", "description": "Target archery", "maxScore": 50, "zone": "North", "id": 10}
+            ]
+        """.trimIndent()
 
-        println("Team Name \t Logo \t Id")
-        for (i in 0 until teams.length()) {
-            val row = teams.getJSONObject(i)
-            println("${row.get("name")} \t ${row.get("logo")} \t ${row.get("id")}")
+        val result = ScoreBoardAPI.parseActivitiesJson(json)
+        assertEquals(1, result.size)
+        assertEquals(ActivityItem("Archery", "Target archery", 50, "North", 10), result[0])
+    }
+
+    @Test
+    fun viewModelRefreshesAfterAddScoreTest() = runTest(testDispatcher) {
+        var currentScore = 50
+        val fakeDataSource = object : ScoreBoardDataSource {
+            override suspend fun getScoreBoardData(): List<ScoreItem> =
+                listOf(ScoreItem("Lions", 1, currentScore, "lion_foreground"))
+
+            override suspend fun getTeamsData(): List<TeamItem> =
+                listOf(TeamItem("Lions", 1, "lion_foreground"))
+
+            override suspend fun getActivitiesData(): List<ActivityItem> =
+                listOf(ActivityItem("Archery", "Target archery", 50, "North", 10))
+
+            override suspend fun addScore(teamID: Int, activityID: Int, score: Int): Int {
+                currentScore += score
+                return 200
+            }
         }
 
-        val activities = ScoreBoardAPI.getActivities()
-        println("Number of Activities ${activities.length()}")
+        val viewModel = ScoreboardViewModel(
+            dataSource = fakeDataSource,
+            startPolling = false
+        )
 
-        println("Activity Name \t Description \t Max Score \t Zone \t Id")
-        for (i in 0 until activities.length()) {
-            val row = activities.getJSONObject(i)
-            println("${row.get("name")} \t ${row.get("description")} \t ${row.get("maxScore")} \t ${row.get("zone")} \t ${row.get("id")}")
+        viewModel.refreshData()
+        val initialState = viewModel.uiState.value
+        assertTrue(initialState is ScoreboardViewModel.UiState.Success)
+        assertEquals(50, (initialState as ScoreboardViewModel.UiState.Success).scoreboard.first().score)
+
+        var callbackResult = false
+        viewModel.addScore(teamID = 1, actId = 10, score = 25) { succeeded ->
+            callbackResult = succeeded
         }
+        testDispatcher.scheduler.advanceUntilIdle()
 
-        val teamID: Int = teams.getJSONObject(0).get("id").toString().toInt()
-        val actId = activities.getJSONObject(0).get("id").toString().toInt()
-        val score = 25
-
-        val status = ScoreBoardAPI.addScore(teamID, actId, score)
-        assertEquals(status, 200)
+        assertTrue(callbackResult)
+        val updatedState = viewModel.uiState.value as ScoreboardViewModel.UiState.Success
+        assertEquals(75, updatedState.scoreboard.first().score)
     }
 }

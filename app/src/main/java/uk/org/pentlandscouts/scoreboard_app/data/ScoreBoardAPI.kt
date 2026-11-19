@@ -1,81 +1,89 @@
 package uk.org.pentlandscouts.scoreboard_app.data
 
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
-import khttp.responses.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
+import kotlinx.serialization.json.Json
+import uk.org.pentlandscouts.scoreboard_app.BuildConfig
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
+interface ScoreBoardDataSource {
+    suspend fun getScoreBoardData(): List<ScoreItem>
+    suspend fun getTeamsData(): List<TeamItem>
+    suspend fun getActivitiesData(): List<ActivityItem>
+    suspend fun addScore(teamID: Int, activityID: Int, score: Int): Int
+}
 
-class ScoreBoardAPI {
-    companion object {
-        private const val BASE_URL: String = "http://ec2-3-250-117-19.eu-west-1.compute.amazonaws.com:8080"
-        private const val SCOREBOARD_API_URL: String = "$BASE_URL/scoreboard/table"
-        private const val TEAMS_API_URL: String = "$BASE_URL/teams"
-        private const val ACTIVITIES_API_URL: String = "$BASE_URL/activities"
-        private const val ADD_SCORE:String = "$BASE_URL/scoreboard/add"
+object ScoreBoardAPI : ScoreBoardDataSource {
+    private const val TIMEOUT_MS = 10_000
+    private val BASE_URL: String = BuildConfig.BASE_URL
+    private val SCOREBOARD_API_URL: String = "$BASE_URL/scoreboard/table"
+    private val TEAMS_API_URL: String = "$BASE_URL/teams"
+    private val ACTIVITIES_API_URL: String = "$BASE_URL/activities"
+    private val ADD_SCORE_URL: String = "$BASE_URL/scoreboard/add"
 
-        suspend fun getScoreBoardData(): JSONArray {
-            return withContext(Dispatchers.IO) { getScoreBoardDataList() }
+    internal val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        coerceInputValues = true
+    }
+
+    override suspend fun getScoreBoardData(): List<ScoreItem> = withContext(Dispatchers.IO) {
+        parseScoreBoardJson(fetchBody(SCOREBOARD_API_URL))
+    }
+
+    override suspend fun getTeamsData(): List<TeamItem> = withContext(Dispatchers.IO) {
+        parseTeamsJson(fetchBody(TEAMS_API_URL))
+    }
+
+    override suspend fun getActivitiesData(): List<ActivityItem> = withContext(Dispatchers.IO) {
+        parseActivitiesJson(fetchBody(ACTIVITIES_API_URL))
+    }
+
+    override suspend fun addScore(teamID: Int, activityID: Int, score: Int): Int =
+        withContext(Dispatchers.IO) {
+            val url = "$ADD_SCORE_URL/$teamID/$activityID/$score"
+            executeRequestStatusCode(url)
         }
 
-        private fun getScoreBoardDataList(): JSONArray {
-            return getScoreBoard()
+    internal fun parseScoreBoardJson(payload: String): List<ScoreItem> =
+        json.decodeFromString(payload)
+
+    internal fun parseTeamsJson(payload: String): List<TeamItem> =
+        json.decodeFromString(payload)
+
+    internal fun parseActivitiesJson(payload: String): List<ActivityItem> =
+        json.decodeFromString(payload)
+
+    private fun fetchBody(urlString: String): String {
+        val connection = (URL(urlString).openConnection() as HttpURLConnection).apply {
+            requestMethod = "GET"
+            connectTimeout = TIMEOUT_MS
+            readTimeout = TIMEOUT_MS
+            setRequestProperty("Accept", "application/json")
         }
-
-        fun getScoreBoard() : JSONArray
-        {
-            return getAPIData(SCOREBOARD_API_URL)
+        try {
+            val statusCode = connection.responseCode
+            if (statusCode !in 200..299) {
+                throw IOException("HTTP error $statusCode fetching $urlString")
+            }
+            return connection.inputStream.bufferedReader().use { it.readText() }
+        } finally {
+            connection.disconnect()
         }
+    }
 
-        suspend fun getTeamsData(): JSONArray {
-            return withContext(Dispatchers.IO) { getTeams() }
+    private fun executeRequestStatusCode(urlString: String): Int {
+        val connection = (URL(urlString).openConnection() as HttpURLConnection).apply {
+            requestMethod = "GET"
+            connectTimeout = TIMEOUT_MS
+            readTimeout = TIMEOUT_MS
         }
-
-        fun getTeams() : JSONArray
-        {
-            return getAPIData(TEAMS_API_URL)
-        }
-
-        suspend fun getActivitiesData(): JSONArray {
-            return withContext(Dispatchers.IO) { getActivities() }
-        }
-
-        fun getActivities() : JSONArray
-        {
-            val activities:JSONArray = getAPIData(ACTIVITIES_API_URL)
-            return activities
-        }
-
-        private fun getAPIData(url: String): JSONArray {
-            val response: Response =
-                khttp.get(url)
-            val statusCode = response.statusCode
-            val data: JSONArray = response.jsonArray
-
-            return data
-        }
-
-        private fun update(url: String): Int {
-
-            val policy = ThreadPolicy.Builder().permitAll().build()
-            StrictMode.setThreadPolicy(policy)
-
-            val response: Response =
-                khttp.get(url)
-            val statusCode = response.statusCode
-
-            return statusCode
-        }
-
-        fun addScore(teamID:Int, activityID:Int, score:Int): Int
-        {
-            val url = "$ADD_SCORE/$teamID/$activityID/$score"
-            println("Add Score URL: $url")
-            val statusCode = update(url)
-            println("Status Code: $statusCode")
-            return statusCode
+        try {
+            return connection.responseCode
+        } finally {
+            connection.disconnect()
         }
     }
 }
