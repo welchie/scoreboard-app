@@ -1,6 +1,5 @@
 package uk.org.pentlandscouts.scoreboard_app.ui.activities
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +39,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
 
 @Composable
-fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context) {
+fun ActivitiesScreen(viewModel: ScoreboardViewModel) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     when (val state = uiState) {
@@ -190,5 +190,5 @@ fun ActivitiesScreen(viewModel: ScoreboardViewModel, context: Context) {
 @Preview
 @Composable
 fun ActivitiesScreenPrev() {
-    ActivitiesScreen(viewModel = viewModel(), context = LocalContext.current)
+    ActivitiesScreen(viewModel = viewModel())
 }

@@ -1,6 +1,5 @@
 package uk.org.pentlandscouts.scoreboard_app.ui.teams
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +43,8 @@ import uk.org.pentlandscouts.scoreboard_app.ui.ScoreboardViewModel
 import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 
 @Composable
-fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context) {
+fun TeamsScreen(viewModel: ScoreboardViewModel) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     when (val state = uiState) {
@@ -200,5 +200,5 @@ fun TeamsScreen(viewModel: ScoreboardViewModel, context: Context) {
 @Composable
 @Preview
 fun TeamsPreview() {
-    TeamsScreen(viewModel = viewModel(), context = LocalContext.current)
+    TeamsScreen(viewModel = viewModel())
 }

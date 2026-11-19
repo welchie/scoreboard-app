@@ -1,6 +1,5 @@
 package uk.org.pentlandscouts.scoreboard_app.ui.scoreboard
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,9 +43,9 @@ import uk.org.pentlandscouts.scoreboard_app.util.ResourceUtils
 @Composable
 fun ScoreboardScreen(
     viewModel: ScoreboardViewModel,
-    context: Context,
-    onAddScore: (String, String) -> Unit = { _: String, _: String -> }
+    onAddScore: (String, Int) -> Unit = { _, _ -> }
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     when (val state = uiState) {
@@ -185,7 +185,7 @@ fun ScoreboardScreen(
                                             it.teamName == scoreItem.teamName
                                         }
                                         if (matchingTeam != null) {
-                                            onAddScore(scoreItem.teamName, matchingTeam.id.toString())
+                                            onAddScore(scoreItem.teamName, matchingTeam.id)
                                         }
                                     },
                                     contentPadding = PaddingValues(8.dp),
